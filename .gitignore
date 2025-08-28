@@ -1,0 +1,19 @@
+node_modules
+dist
+*.zip
+
+# Yarn
+.yarn-cache
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# npm
+.npm
+package-lock.json
+
+# Bun (keep for backward compatibility)
+bun.lock

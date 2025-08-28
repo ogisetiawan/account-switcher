@@ -1,0 +1,49 @@
+{
+  "name": "session-switcher",
+  "version": "1.2.0",
+  "author": "Fanesz",
+  "main": "dist/background.js",
+  "devDependencies": {
+    "@types/chrome": "^0.0.323",
+    "@types/firefox-webext-browser": "^120.0.4",
+    "@types/webextension-polyfill": "^0.12.3",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "esbuild": "^0.19.12",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-multiline-arrays": "^4.0.3",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.3.3",
+    "web-ext": "^8.7.0",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "description": "Browser extension for switching sessions",
+  "keywords": [
+    "extension",
+    "session",
+    "switcher"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint src --ext .ts,.js --fix",
+    "lint:check": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "build:firefox": "node build/build.js firefox",
+    "build:chrome": "node build/build-chrome.js",
+    "dev:firefox": "npm run build:firefox && web-ext run --source-dir=dist",
+    "dev:chrome": "npm run build:chrome",
+    "clean": "node build/clean-dist.js",
+    "postinstall": "npm run build:chrome",
+    "test:server": "npx http-server test -p 3000 -o test/popup-test.html",
+    "test:open": "start test/popup-test.html"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18.16.0"
+  }
+}
