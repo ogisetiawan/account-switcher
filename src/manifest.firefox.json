@@ -29,13 +29,6 @@
     "128": "assets/icons/icon-128.png"
   },
 
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "session-switcher@fanesp.online",
-      "strict_min_version": "109.0"
-    }
-  },
-
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   }

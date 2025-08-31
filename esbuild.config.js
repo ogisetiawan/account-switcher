@@ -7,7 +7,7 @@ await build({
   platform: "browser",
   target: "chrome88", // Target Chrome instead of Firefox
   format: "iife",
-  globalName: "SessionSwitcher",
+  globalName: "AccountSwitcher",
   minify: false,
   sourcemap: false,
 });

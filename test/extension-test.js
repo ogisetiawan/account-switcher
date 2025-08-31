@@ -1,5 +1,5 @@
 /**
- * Session Switcher Extension - Test Functions
+ * Accont Switcher Extension - Test Functions
  * File ini berisi fungsi-fungsi untuk test extension tanpa perlu load ke Chrome
  */
 

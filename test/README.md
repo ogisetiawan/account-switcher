@@ -1,4 +1,4 @@
-# 🧪 Session Switcher Extension - Testing Guide
+# 🧪 Accont Switcher Extension - Testing Guide
 
 Guide ini menjelaskan cara test extension tanpa perlu load ke Chrome.
 

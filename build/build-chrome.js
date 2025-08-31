@@ -13,7 +13,7 @@ const assetsDir = path.join(rootDir, "src", "assets");
 const distDir = path.join(rootDir, "dist");
 const popupDist = path.join(distDir, "popup");
 
-console.log("Building Session Switcher Extension for Chrome...");
+console.log("Building Acccont Switcher Extension for Chrome...");
 
 // Clean previous build
 try {

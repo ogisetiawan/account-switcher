@@ -19,7 +19,7 @@ if (!["firefox", "chrome"].includes(target)) {
   process.exit(1);
 }
 
-console.log(`Building Session Switcher Extension for ${target}...`);
+console.log(`Building Account Switcher Extension for ${target}...`);
 
 // Clean previous build
 try {

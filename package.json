@@ -1,7 +1,7 @@
 {
-  "name": "session-switcher",
+  "name": "account-switcher",
   "version": "1.2.0",
-  "author": "Fanesz",
+  "author": "ogisetiawan",
   "main": "dist/background.js",
   "devDependencies": {
     "@types/chrome": "^0.0.323",
@@ -20,11 +20,12 @@
     "webpack": "^5.90.0",
     "webpack-cli": "^5.1.0"
   },
-  "description": "Browser extension for switching sessions",
+  "description": "Browser extension for switching accounts",
   "keywords": [
     "extension",
     "session",
-    "switcher"
+    "switcher",
+    "account"
   ],
   "license": "MIT",
   "scripts": {

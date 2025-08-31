@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide focuses on developing and testing the Session Switcher extension for Chrome.
+This guide focuses on developing and testing the Account Switcher extension for Chrome.
 
 ## Build Commands
 

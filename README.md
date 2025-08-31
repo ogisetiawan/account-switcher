@@ -1,6 +1,6 @@
-# Session Switcher Extension
+# Account Switcher Extension
 
-Browser extension for switching sessions with support for multiple package managers.
+Browser extension for switching Account with support for multiple package managers.
 
 ## Installation
 
