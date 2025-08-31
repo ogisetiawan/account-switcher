@@ -35,7 +35,8 @@ await mkdir(popupDist, { recursive: true });
 // Compile background script
 console.log("Compiling background script...");
 try {
-  const backgroundCmd = `npx esbuild src/background/index.ts --bundle --platform=browser --target=chrome88 --format=iife --outfile=dist/background/index.js`;
+  const backgroundCmd =
+    "npx esbuild src/background/index.ts --bundle --platform=browser --target=chrome88 --format=iife --outfile=dist/background/index.js";
   console.log(`Running: ${backgroundCmd}`);
   execSync(backgroundCmd, {
     stdio: "inherit",
@@ -50,7 +51,7 @@ try {
 // Compile popup script
 console.log("Compiling popup script...");
 try {
-  const popupCmd = `npx esbuild src/popup/index.ts --bundle --platform=browser --target=chrome88 --format=iife --outfile=dist/popup/index.js`;
+  const popupCmd = "npx esbuild src/popup/index.ts --bundle --platform=browser --target=chrome88 --format=iife --outfile=dist/popup/index.js";
   console.log(`Running: ${popupCmd}`);
   execSync(popupCmd, {
     stdio: "inherit",
