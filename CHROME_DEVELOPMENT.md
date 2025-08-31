@@ -69,12 +69,6 @@ dist/
 │   ├── index.html
 │   ├── index.js
 │   └── style.css
-└── assets/
-    └── icons/
-        ├── icon-16.png
-        ├── icon-32.png
-        ├── icon-48.png
-        └── icon-128.png
 ```
 
 ## Development Workflow

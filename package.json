@@ -39,7 +39,6 @@
     "dev:firefox": "npm run build:firefox && web-ext run --source-dir=dist",
     "dev:chrome": "npm run build:chrome",
     "clean": "node build/clean-dist.js",
-    "postinstall": "npm run build:chrome",
     "test:server": "npx http-server test -p 3000 -o test/popup-test.html",
     "test:open": "start test/popup-test.html"
   },
