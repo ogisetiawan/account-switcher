@@ -11,10 +11,12 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "resolveJsonModule": true,
-    "types": ["chrome"],
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "types": ["chrome", "react", "react-dom"],
     "paths": {
       "@background/*": ["./src/background/*"],
-      "@popup/*": ["./src/popup/*"],
+      "@popup/*": ["./src/popup/"],
       "@shared/*": ["./src/shared/*"]
     }
   },

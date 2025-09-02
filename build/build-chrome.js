@@ -41,10 +41,10 @@ try {
   process.exit(1);
 }
 
-// Compile popup script
-console.log("Compiling popup script...");
+// Compile popup script with React and Tailwind
+console.log("Compiling popup script with React...");
 try {
-  const popupCmd = "npx esbuild src/popup/index.ts --bundle --platform=browser --target=chrome88 --format=iife --outfile=dist/popup/index.js";
+  const popupCmd = 'npx esbuild src/popup/index.tsx --bundle --platform=browser --target=chrome88 --format=iife --outfile=dist/popup/index.js --jsx=automatic --loader:.tsx=tsx --loader:.ts=ts --loader:.css=css --external:chrome';
   console.log(`Running: ${popupCmd}`);
   execSync(popupCmd, {
     stdio: "inherit",
@@ -52,6 +52,21 @@ try {
   });
 } catch (error) {
   console.error("❌ Failed to compile popup script");
+  console.error("Error details:", error.message);
+  process.exit(1);
+}
+
+// Process CSS with Tailwind
+console.log("Processing CSS with Tailwind...");
+try {
+  const tailwindCmd = `npx tailwindcss -i ${path.join(popupSrc, "globals.css")} -o ${path.join(distDir, "popup", "styles.css")} --content "./src/**/*.{html,js,ts,jsx,tsx}" --minify`;
+  console.log(`Running: ${tailwindCmd}`);
+  execSync(tailwindCmd, {
+    stdio: "inherit",
+    cwd: rootDir,
+  });
+} catch (error) {
+  console.error("❌ Failed to process CSS with Tailwind");
   console.error("Error details:", error.message);
   process.exit(1);
 }

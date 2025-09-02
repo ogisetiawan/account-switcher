@@ -4,6 +4,7 @@
   "author": "ogisetiawan",
   "main": "dist/background.js",
   "devDependencies": {
+    "@tailwindcss/cli": "4.1.12",
     "@types/chrome": "^0.0.323",
     "@types/firefox-webext-browser": "^120.0.4",
     "@types/webextension-polyfill": "^0.12.3",
@@ -45,5 +46,19 @@
   "type": "module",
   "engines": {
     "node": ">=18.16.0"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "0.5.10",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "autoprefixer": "10.4.21",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "0.542.0",
+    "postcss": "8.5.6",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "tailwind-merge": "3.3.1",
+    "tailwindcss": "4.1.12"
   }
 }
