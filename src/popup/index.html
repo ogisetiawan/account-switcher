@@ -6,14 +6,9 @@
     <meta name="description" content="Chrome extension for switching between multiple account sessions">
     <meta name="author" content="@ogisetiawan">
     <meta name="web_author" content="ogisetiawan.github.io">
-    <meta name="author" content="@ogisetiawan">
-    <meta name="web_author" content="ogisetiawan.github.io">
     <title>Account Switcher - Chrome Extension</title>
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
-    <!-- <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style"> -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
     <!-- <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style"> -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" as="style">
@@ -21,15 +16,12 @@
     <!-- Optimized CSS loading -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" media="print" onload="this.media='all'">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" media="print" onload="this.media='all'">
     
     <!-- Local Tailwind CSS instead of CDN for better performance -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     
     <style>
         :root {
-            --primary-color: #F6843C;
-            --secondary-color: #fff7ed;
             --primary-color: #F6843C;
             --secondary-color: #fff7ed;
             --text-primary: #1F2937;
@@ -42,7 +34,6 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-primary);
             font-feature-settings: 'kern' 1, 'liga' 1;
@@ -72,7 +63,6 @@
         .site-button.active {
             transform: scale(1.05) translateY(-2px);
             box-shadow: 0 8px 25px rgba(246, 143, 59, 0.3);
-            box-shadow: 0 8px 25px rgba(246, 143, 59, 0.3);
         }
 
         .session-item {
@@ -85,7 +75,6 @@
             transform: translateX(4px);
         }
 
-        .pt-2 material-symbols-rounded {
         .pt-2 material-symbols-rounded {
             font-variation-settings: 
                 'FILL' 0,
@@ -128,15 +117,7 @@
     <main class="flex flex-col min-h-screen bg-gray-50" role="main">
         
         <!-- /?@ Header Section -->
-        <!-- /?@ Header Section -->
         <header class="flex justify-between items-center p-4 pb-2" role="banner">
-            <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
-                <img 
-                    src="../assets/img/account-switcher.png" 
-                    alt="Account Switcher Logo" 
-                    class="w-6 h-6 flex-shrink-0"
-                />
-                <span>Account Switcher</span>
             <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
                 <img 
                     src="../assets/img/account-switcher.png" 
@@ -150,33 +131,27 @@
                 <button 
                     type="button"
                     class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                     aria-label="Add new session"
                     data-action="add-session"
                 >
-                    <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
                     <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
                 </button>
                 
                 <button 
                     type="button"
                     class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                     aria-label="Save current session"
                     data-action="save-session"
                 >
-                    <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
                     <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
                 </button>
             </nav>
         </header>
 
         <!-- /?@ Search Section -->
-        <!-- /?@ Search Section -->
         <section class="px-4 mb-4" role="search">
             <div class="relative">
                 <label for="website-search" class="sr-only">Search for websites</label>
-                <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true">
                 <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true">
                     search
                 </span>
@@ -192,7 +167,6 @@
             </div>
         </section>
 
-        <!-- /?@ Website Selection Grid -->
         <!-- /?@ Website Selection Grid -->
         <section class="px-4 mb-6" aria-labelledby="website-selection-heading">
             <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
@@ -292,10 +266,8 @@
         </section>
 
         <!-- /?@ Sessions List -->
-        <!-- /?@ Sessions List -->
         <section class="flex-grow px-4 pb-20" aria-labelledby="sessions-heading">
             <div class="glassmorphism p-4">
-                <header class="flex flex-col items-left mb-4">
                 <header class="flex flex-col items-left mb-4">
                     <h2 id="sessions-heading" class="text-lg font-semibold text-gray-800">
                         Saved Sessions for Google
@@ -310,10 +282,8 @@
                         
                         <li role="listitem">
                             <article class="session-item active flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-orange-50">
-                            <article class="session-item active flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-orange-50">
                                 <div class="flex items-center flex-1 min-w-0">
                                     <img 
-                                        src="../assets/img/account.png"
                                         src="../assets/img/account.png"
                                         alt="Profile picture for personal@email.com"
                                         class="w-10 h-10 rounded-full mr-4"
@@ -328,7 +298,6 @@
                                         <p class="text-sm text-gray-500">
                                             <time datetime="2025-09-06T12:22:00">Last used: 2 hours ago</time>
                                             <span class="ml-0 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">
-                                            <span class="ml-0 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">
                                                 Active
                                             </span>
                                         </p>
@@ -339,24 +308,20 @@
                                     <button 
                                         type="button"
                                         class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                                         aria-label="Edit personal@email.com session"
                                         data-action="edit-session"
                                         data-email="personal@email.com"
                                     >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
                                         <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
                                     </button>
                                     
                                     <button 
                                         type="button"
                                         class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                                         aria-label="Delete personal@email.com session"
                                         data-action="delete-session"
                                         data-email="personal@email.com"
                                     >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
                                         <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
                                     </button>
                                 </nav>
@@ -368,7 +333,6 @@
                                 
                                 <div class="flex items-center flex-1 min-w-0">
                                     <img 
-                                        src="../assets/img/account.png" 
                                         src="../assets/img/account.png" 
                                         alt="Profile picture for work@company.com"
                                         class="w-10 h-10 rounded-full mr-4"
@@ -390,24 +354,20 @@
                                     <button 
                                         type="button"
                                         class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                                         aria-label="Edit work@company.com session"
                                         data-action="edit-session"
                                         data-email="work@company.com"
                                     >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
                                         <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
                                     </button>
                                     
                                     <button 
                                         type="button"
                                         class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                                         aria-label="Delete work@company.com session"
                                         data-action="delete-session"
                                         data-email="work@company.com"
                                     >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
                                         <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
                                     </button>
                                 </nav>
@@ -420,28 +380,7 @@
     </main>
 
     <!-- /?@ Footer -->
-    <!-- /?@ Footer -->
     <footer class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] h-12 flex items-center justify-between px-4 z-10" role="contentinfo">
-        <!-- Left side: Help dan Settings icons -->
-        <div class="flex items-center space-x-0 pt-2">
-            <button 
-                type="button"
-                class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Help center"
-                data-action="show-help"
-            >
-                <span class="material-symbols-rounded text-gray-600" aria-hidden="true">help_center</span>
-            </button>
-    
-            <button 
-                type="button"
-                class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Settings"
-                data-action="show-settings"
-            >
-                <span class="material-symbols-rounded text-gray-600" aria-hidden="true">settings</span>
-            </button>
-        </div>
         <!-- Left side: Help dan Settings icons -->
         <div class="flex items-center space-x-0 pt-2">
             <button 
@@ -480,9 +419,6 @@
         </p>
         
     </footer>
-    
-
-    <!--//@ Loading overlay for better UX -->
     
 
     <!--//@ Loading overlay for better UX -->
