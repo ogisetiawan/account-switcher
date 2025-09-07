@@ -138,7 +138,7 @@ class SessionSwitcher {
         if (siteSessions.length === 0) {
             sessionsContainer.innerHTML = `
                 <li class="text-center py-8 text-gray-500">
-                    <span class="material-symbols-outlined text-4xl mb-2 block">account_circle</span>
+                    <span class="material-symbols-rounded text-4xl mb-2 block">account_circle</span>
                     <p>No saved sessions for ${this.currentSite}</p>
                     <button type="button" class="mt-2 text-blue-600 hover:text-blue-800" data-action="add-session">
                         Add your first session
@@ -168,10 +168,10 @@ class SessionSwitcher {
                     </div>
                     <nav class="flex items-center space-x-1 ml-2" aria-label="Session actions">
                         <button type="button" class="p-2 rounded-full hover:bg-gray-200 focus-ring" aria-label="Edit ${session.email} session" data-action="edit-session" data-email="${session.email}">
-                            <span class="material-symbols-outlined text-gray-600 text-base">edit</span>
+                            <span class="material-symbols-rounded text-gray-600 text-base">edit</span>
                         </button>
                         <button type="button" class="p-2 rounded-full hover:bg-gray-200 focus-ring" aria-label="Delete ${session.email} session" data-action="delete-session" data-email="${session.email}">
-                            <span class="material-symbols-outlined text-gray-600 text-base">delete</span>
+                            <span class="material-symbols-rounded text-gray-600 text-base">delete</span>
                         </button>
                     </nav>
                 </article>
