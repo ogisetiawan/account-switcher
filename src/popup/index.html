@@ -100,6 +100,61 @@
             animation: spin 1s linear infinite;
         }
 
+        /* Styling untuk Grid yang dapat di-scroll */ 
+        .scrollable-grid {
+            max-height: 9rem; 
+            overflow-y: auto;
+            padding-right: 8px; 
+        }
+
+        /* Kustomisasi scrollbar untuk browser WebKit (Chrome, Safari) */
+        .scrollable-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-grid::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+
+        .scrollable-grid::-webkit-scrollbar-thumb {
+            background-color: var(--border-color); 
+            border-radius: 10px;
+            border: 3px solid transparent;
+        }
+
+        .scrollable-grid::-webkit-scrollbar-thumb:hover {
+            background-color: var(--text-secondary); 
+        }
+
+        /* Styling untuk Sessions List yang dapat di-scroll */
+        /* Styling untuk Daftar Sesi yang dapat di-scroll */
+.scrollable-sessions {
+    /* Perkiraan tinggi untuk 3 item: (tinggi item ~4.2rem * 3) + (jarak antar item 0.75rem * 2) */
+    max-height: 14.1rem;
+    overflow-y: auto;
+    padding-right: 8px; /* Ruang untuk scrollbar */
+    margin-right: -8px; /* Mengimbangi padding agar konten tetap sejajar */
+}
+
+/* Kustomisasi scrollbar agar konsisten */
+.scrollable-sessions::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-sessions::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollable-sessions::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 10px;
+}
+
+.scrollable-sessions::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-secondary);
+}
+
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -168,11 +223,12 @@
         </section>
 
         <!-- /?@ Website Selection Grid -->
-        <section class="px-4 mb-6" aria-labelledby="website-selection-heading">
+        <section class="px-4 mb-6 scrollable-grid" aria-labelledby="website-selection-heading">
             <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
             
             <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
                 
+                <!-- Baris 1 -->
                 <article class="flex justify-center">
                     <button 
                         type="button"
@@ -190,7 +246,6 @@
                         />
                     </button>
                 </article>
-
                 <article class="flex justify-center">
                     <button 
                         type="button"
@@ -208,7 +263,6 @@
                         />
                     </button>
                 </article>
-
                 <article class="flex justify-center">
                     <button 
                         type="button"
@@ -226,7 +280,6 @@
                         />
                     </button>
                 </article>
-
                 <article class="flex justify-center">
                     <button 
                         type="button"
@@ -245,21 +298,44 @@
                     </button>
                 </article>
 
+                <!-- Baris 2 -->
                 <article class="flex justify-center">
                     <button 
                         type="button"
                         class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Slack account"
+                        aria-label="Switch to Twitter account"  
                         aria-pressed="false"
-                        data-site="slack"
+                        data-site="twitter"
                     >
                         <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGlj7TB88lysP5h1jHSuIJkhePslQDHvG2cIBpPCjoosFs8JvwRYILJimH-fFwq20H7dal_8NNoBjthMdbRoYsWLoMDhvJzczhWyWKUoABILYWw9Aa8iKZoALrKfMrpgX2sVRjfJTGcO6bRUcrQ8Xn8vYHW-fi6nI1CM8CDj4S_dcgRkgYQJWnlhE07kAOB6W8IDYsIL8WNvf5SJA_PbQNUO0DgevgRGTzz4gXhsNvY20gjt24qaU0Tuqgb2R3Dwuez_jCH-vvNpiY" 
-                            alt="Slack"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9IiMOTFozXrCUeHdd97c8Echlnnc2du0LpM4jD7ssk1DninXsEM6J5jE_wEc0qyn85fWlN9gxDrJQC9tgSsAmBtItAleW9Bc6lJxX4wJeKTXxET-sBsB_iLzs-_Ydlrk1SbmxtBB54ptmgB5Mf9mrw2lO3dkUqyOngYEq_nl-pifmr0cUp_YqpflXuuLsFooXBcTSnRPl1XIAvSgWVGLLL6LGTtAOzIENL-RUDg4gvQoeH1tINXldzze8mKjsg67PRnwVaIOZb0U1" 
+                            alt="Twitter"
                             class="w-10 h-10"
                             loading="lazy"
                             decoding="async"
                         />
+                    </button>
+                </article>
+                <article class="flex justify-center">
+                    <button type="button" class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" aria-label="Switch to Discord account" aria-pressed="false" data-site="discord">
+                        <img src="https://..." alt="Discord" class="w-10 h-10 pointer-events-none">
+                    </button>
+                </article>
+                <article class="flex justify-center">
+                    <button type="button" class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" aria-label="Switch to Notion account" aria-pressed="false" data-site="notion">
+                        <img src="https://..." alt="Notion" class="w-10 h-10 pointer-events-none">
+                    </button>
+                </article>
+                <article class="flex justify-center">
+                    <button type="button" class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" aria-label="Switch to Figma account" aria-pressed="false" data-site="figma">
+                        <img src="https://..." alt="Figma" class="w-10 h-10 pointer-events-none">
+                    </button>
+                </article>
+
+                <!-- Baris 3 (akan menyebabkan scroll muncul) -->
+                <article class="flex justify-center">
+                    <button type="button" class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" aria-label="Switch to Trello account" aria-pressed="false" data-site="trello">
+                        <img src="https://..." alt="Trello" class="w-10 h-10 pointer-events-none">
                     </button>
                 </article>
             </div>
@@ -273,11 +349,12 @@
                         Saved Sessions for Google
                     </h2>
                     <div class="text-sm text-gray-500" aria-live="polite">
-                        <span id="session-count">2 sessions</span>
+                        <span id="session-count">4 sessions</span>
                     </div>
                 </header>
 
-                <div role="group" aria-labelledby="sessions-heading">
+                <!-- Tambahkan class "scrollable-sessions" di sini -->
+                <div class="scrollable-sessions" role="group" aria-labelledby="sessions-heading">
                     <ul class="space-y-3" role="list">
                         
                         <li role="listitem">
@@ -327,7 +404,6 @@
                                 </nav>
                             </article>
                         </li>
-
                         <li role="listitem">
                             <article class="session-item flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-gray-100">
                                 
@@ -373,10 +449,95 @@
                                 </nav>
                             </article>
                         </li>
+                        <li role="listitem">
+                            <article class="session-item flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-gray-100">
+                                
+                                <div class="flex items-center flex-1 min-w-0">
+                                    <img 
+                                        src="../assets/img/account.png" 
+                                        alt="Profile picture for work@company.com"
+                                        class="w-10 h-10 rounded-full mr-4"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                    
+                                    <div class="min-w-0">
+                                        <h3 class="font-medium text-gray-800 truncate">
+                                            work@company.com
+                                        </h3>
+                                        <p class="text-sm text-gray-500">
+                                            <time datetime="2025-09-05T14:22:00">Last used: 1 day ago</time>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <nav class="flex items-center space-x-1 ml-2" aria-label="Session actions">
+                                    <button 
+                                        type="button"
+                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                                        aria-label="Edit work@company.com session"
+                                        data-action="edit-session"
+                                        data-email="work@company.com"
+                                    >
+                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
+                                    </button>
+                                    
+                                    <button 
+                                        type="button"
+                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                                        aria-label="Delete work@company.com session"
+                                        data-action="delete-session"
+                                        data-email="work@company.com"
+                                    >
+                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
+                                    </button>
+                                </nav>
+                            </article>
+                        </li>
+
+                        <!-- Item 4 (Item ini akan menyebabkan scrollbar muncul) -->
+                        <li role="listitem">
+                            <article class="session-item flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-gray-100">
+                                <div class="flex items-center flex-1 min-w-0">
+                                    <img src="../assets/img/account.png" alt="Profile picture for another.user@email.com" class="w-10 h-10 rounded-full mr-4">
+                                    <div class="min-w-0">
+                                        <h3 class="font-medium text-gray-800 truncate">
+                                            another.user@email.com
+                                        </h3>
+                                        <p class="text-sm text-gray-500">
+                                            <time datetime="2025-09-04T10:00:00">Last used: 2 days ago</time>
+                                        </p>
+                                    </div>
+                                </div>
+                                <nav class="flex items-center space-x-1 ml-2" aria-label="Session actions">
+                                    <button 
+                                        type="button"
+                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                                        aria-label="Edit work@company.com session"
+                                        data-action="edit-session"
+                                        data-email="work@company.com"
+                                    >
+                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
+                                    </button>
+                                    
+                                    <button 
+                                        type="button"
+                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                                        aria-label="Delete work@company.com session"
+                                        data-action="delete-session"
+                                        data-email="work@company.com"
+                                    >
+                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
+                                    </button>
+                                </nav>
+                            </article>
+                        </li>
+
                     </ul>
                 </div>
             </div>
         </section>
+
     </main>
 
     <!-- /?@ Footer -->
