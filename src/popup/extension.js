@@ -1,17 +1,17 @@
 // Extension functionality with performance optimizations
 class SessionSwitcher {
-    constructor() {
+  constructor() {
     this.currentSite = "google";
-        this.sessions = new Map();
+    this.sessions = new Map();
     this.currentPage = "main"; // "main" atau "detail"
-        this.init();
-    }
+    this.init();
+  }
 
-    init() {
+  init() {
     this.initializeStaticData();
-        this.bindEvents();
-        this.loadSessions();
-        this.setupKeyboardNavigation();
+    this.bindEvents();
+    this.loadSessions();
+    this.setupKeyboardNavigation();
     this.showPage("main");
   }
 
@@ -26,21 +26,27 @@ class SessionSwitcher {
             email: "personal@gmail.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "work@gmail.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-            active: false
+            active: false,
           },
           {
             email: "business@gmail.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+          {
+            email: "test@gmail.com",
+            avatar: "../assets/img/account.png",
+            lastUsed: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+            active: false,
+          },
+        ],
       },
       facebook: {
         name: "Facebook",
@@ -50,15 +56,15 @@ class SessionSwitcher {
             email: "john.doe@facebook.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "jane.smith@facebook.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+        ],
       },
       github: {
         name: "GitHub",
@@ -68,21 +74,21 @@ class SessionSwitcher {
             email: "developer@github.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "open.source@github.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
+            active: false,
           },
           {
             email: "work.projects@github.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+        ],
       },
       twitter: {
         name: "Twitter",
@@ -92,9 +98,9 @@ class SessionSwitcher {
             email: "personal@twitter.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-            active: true
-          }
-        ]
+            active: true,
+          },
+        ],
       },
       discord: {
         name: "Discord",
@@ -104,15 +110,15 @@ class SessionSwitcher {
             email: "gamer@discord.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "community@discord.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+        ],
       },
       notion: {
         name: "Notion",
@@ -122,9 +128,9 @@ class SessionSwitcher {
             email: "productivity@notion.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-            active: true
-          }
-        ]
+            active: true,
+          },
+        ],
       },
       figma: {
         name: "Figma",
@@ -134,15 +140,15 @@ class SessionSwitcher {
             email: "designer@figma.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "team@figma.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+        ],
       },
       trello: {
         name: "Trello",
@@ -152,9 +158,9 @@ class SessionSwitcher {
             email: "project.manager@trello.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            active: true
-          }
-        ]
+            active: true,
+          },
+        ],
       },
       linkedin: {
         name: "LinkedIn",
@@ -164,15 +170,15 @@ class SessionSwitcher {
             email: "professional@linkedin.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "networking@linkedin.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+        ],
       },
       instagram: {
         name: "Instagram",
@@ -182,9 +188,9 @@ class SessionSwitcher {
             email: "personal@instagram.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-            active: true
-          }
-        ]
+            active: true,
+          },
+        ],
       },
       youtube: {
         name: "YouTube",
@@ -194,15 +200,15 @@ class SessionSwitcher {
             email: "creator@youtube.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "viewer@youtube.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
+            active: false,
+          },
+        ],
       },
       slack: {
         name: "Slack",
@@ -212,103 +218,103 @@ class SessionSwitcher {
             email: "team@slack.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-            active: true
+            active: true,
           },
           {
             email: "project@slack.com",
             avatar: "../assets/img/account.png",
             lastUsed: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-            active: false
-          }
-        ]
-      }
+            active: false,
+          },
+        ],
+      },
     };
-    }
+  }
 
-    bindEvents() {
-        // Use event delegation for better performance
+  bindEvents() {
+    // Use event delegation for better performance
     document.addEventListener("click", this.handleClick.bind(this));
     document.addEventListener("keydown", this.handleKeydown.bind(this));
-        
-        // Search functionality with debounce
-    const searchInput = document.querySelector("[data-search=\"websites\"]");
-        if (searchInput) {
+
+    // Search functionality with debounce
+    const searchInput = document.querySelector('[data-search="websites"]');
+    if (searchInput) {
       searchInput.addEventListener("input", this.debounce(this.handleSearch.bind(this), 300));
-        }
     }
+  }
 
-    handleClick(event) {
+  handleClick(event) {
     const { action, site, email } = event.target.closest("[data-action], [data-site]")?.dataset || {};
-        
-        switch (action) {
-    case "add-session":
-                this.addSession();
-                break;
-    case "save-session":
-                this.saveSession();
-                break;
-    case "edit-session":
-                this.editSession(email);
-                break;
-    case "delete-session":
-                this.deleteSession(email);
-                break;
-    case "back-to-main":
-      this.showPage("main");
-      break;
-    case "show-info":
-                this.showInfo();
-                break;
-        }
 
-        if (site) {
+    switch (action) {
+      case "add-session":
+        this.addSession();
+        break;
+      case "save-session":
+        this.saveSession();
+        break;
+      case "edit-session":
+        this.editSession(email);
+        break;
+      case "delete-session":
+        this.deleteSession(email);
+        break;
+      case "back-to-main":
+        this.showPage("main");
+        break;
+      case "show-info":
+        this.showInfo();
+        break;
+    }
+
+    if (site) {
       this.navigateToDetail(site);
-        }
     }
+  }
 
-    handleKeydown(event) {
-        // Keyboard shortcuts
-        if (event.ctrlKey || event.metaKey) {
-            switch (event.key) {
-      case "k":
-                    event.preventDefault();
-        document.querySelector("[data-search=\"websites\"]").focus();
-                    break;
-      case "n":
-                    event.preventDefault();
-                    this.addSession();
-                    break;
-            }
-        }
+  handleKeydown(event) {
+    // Keyboard shortcuts
+    if (event.ctrlKey || event.metaKey) {
+      switch (event.key) {
+        case "k":
+          event.preventDefault();
+          document.querySelector('[data-search="websites"]').focus();
+          break;
+        case "n":
+          event.preventDefault();
+          this.addSession();
+          break;
+      }
     }
+  }
 
-    setupKeyboardNavigation() {
-        // Arrow key navigation for site buttons
+  setupKeyboardNavigation() {
+    // Arrow key navigation for site buttons
     const siteButtons = document.querySelectorAll("[data-site]");
-        siteButtons.forEach((button, index) => {
+    siteButtons.forEach((button, index) => {
       button.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight") {
-                    const next = siteButtons[index + 1] || siteButtons[0];
-                    next.focus();
+          const next = siteButtons[index + 1] || siteButtons[0];
+          next.focus();
         } else if (e.key === "ArrowLeft") {
-                    const prev = siteButtons[index - 1] || siteButtons[siteButtons.length - 1];
-                    prev.focus();
-                }
-            });
-        });
-    }
+          const prev = siteButtons[index - 1] || siteButtons[siteButtons.length - 1];
+          prev.focus();
+        }
+      });
+    });
+  }
 
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 
   // Fungsi navigasi antar halaman
   showPage(page) {
@@ -369,7 +375,9 @@ class SessionSwitcher {
                 </li>
             `;
     } else {
-      sessionsList.innerHTML = sessions.map(session => `
+      sessionsList.innerHTML = sessions
+        .map(
+          (session) => `
             <li role="listitem">
           <article class="session-item ${session.active ? "active" : ""} flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-orange-50">
                     <div class="flex items-center flex-1 min-w-0">
@@ -383,7 +391,7 @@ class SessionSwitcher {
                             <h3 class="font-medium text-gray-800 truncate">${session.email}</h3>
                             <p class="text-sm text-gray-500">
                                 <time datetime="${session.lastUsed}">Last used: ${this.formatLastUsed(session.lastUsed)}</time>
-                  ${session.active ? "<span class=\"ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800\">Active</span>" : ""}
+                  ${session.active ? '<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">Active</span>' : ""}
                             </p>
                         </div>
                     </div>
@@ -409,10 +417,12 @@ class SessionSwitcher {
                     </nav>
                 </article>
             </li>
-      `).join("");
+      `
+        )
+        .join("");
     }
 
-        // Update session count
+    // Update session count
     if (sessionCount) {
       sessionCount.textContent = `${sessions.length} session${sessions.length !== 1 ? "s" : ""}`;
     }
@@ -461,24 +471,24 @@ class SessionSwitcher {
   showInfo() {
     console.log("Show info clicked");
     // Implementasi show info
-    }
+  }
 
-    formatLastUsed(timestamp) {
-        const now = new Date();
-        const lastUsed = new Date(timestamp);
-        const diffMs = now - lastUsed;
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        const diffDays = Math.floor(diffHours / 24);
+  formatLastUsed(timestamp) {
+    const now = new Date();
+    const lastUsed = new Date(timestamp);
+    const diffMs = now - lastUsed;
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffHours / 24);
 
     if (diffDays > 0) return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
     if (diffHours > 0) return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
     return "Just now";
-    }
+  }
 }
 
 // Initialize when DOM is ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => new SessionSwitcher());
 } else {
-    new SessionSwitcher();
+  new SessionSwitcher();
 }

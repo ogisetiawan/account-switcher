@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,582 +8,210 @@
     <meta name="author" content="@ogisetiawan">
     <meta name="web_author" content="ogisetiawan.github.io">
     <title>Account Switcher - Chrome Extension</title>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
-    <!-- <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style"> -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" as="style">
-    
-    <!-- Optimized CSS loading -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" media="print" onload="this.media='all'">
-    
-    <!-- Local Tailwind CSS instead of CDN for better performance -->
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
-    <style>
-        :root {
-            --primary-color: #F6843C;
-            --secondary-color: #fff7ed;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
-            --bg-primary: #F9FAFB;
-            --bg-secondary: #FFFFFF;
-            --border-color: #E5E7EB;
-            --shadow-light: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-primary);
-            font-feature-settings: 'kern' 1, 'liga' 1;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .site-button {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
-        }
-
-        .site-button:hover {
-            transform: translateY(-2px);
-        }
-
-        .site-button.active {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 8px 25px rgba(246, 143, 59, 0.3);
-        }
-
-        .session-item {
-            transition: all 0.15s ease-in-out;
-        }
-
-        .session-item.active {
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--primary-color);
-            transform: translateX(4px);
-        }
-
-        .pt-2 material-symbols-rounded {
-            font-variation-settings: 
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 24;
-        }
-
-        /* Focus styles for accessibility */
-        .focus-ring:focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* Loading state */
-        .loading::after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top: 2px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        /* Styling untuk Grid yang dapat di-scroll */ 
-        .scrollable-grid {
-            max-height: 9rem; 
-            overflow-y: auto;
-            padding-right: 8px; 
-        }
-
-        /* Kustomisasi scrollbar untuk browser WebKit (Chrome, Safari) */
-        .scrollable-grid::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .scrollable-grid::-webkit-scrollbar-track {
-            background: transparent; 
-        }
-
-        .scrollable-grid::-webkit-scrollbar-thumb {
-            background-color: var(--border-color); 
-            border-radius: 10px;
-            border: 3px solid transparent;
-        }
-
-        .scrollable-grid::-webkit-scrollbar-thumb:hover {
-            background-color: var(--text-secondary); 
-        }
-
-        /* Styling untuk Sessions List yang dapat di-scroll */
-        /* Styling untuk Daftar Sesi yang dapat di-scroll */
-.scrollable-sessions {
-    /* Perkiraan tinggi untuk 3 item: (tinggi item ~4.2rem * 3) + (jarak antar item 0.75rem * 2) */
-    max-height: 14.1rem;
-    overflow-y: auto;
-    padding-right: 8px; /* Ruang untuk scrollbar */
-    margin-right: -8px; /* Mengimbangi padding agar konten tetap sejajar */
-}
-
-/* Kustomisasi scrollbar agar konsisten */
-.scrollable-sessions::-webkit-scrollbar {
-    width: 6px;
-}
-
-.scrollable-sessions::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.scrollable-sessions::-webkit-scrollbar-thumb {
-    background-color: var(--border-color);
-    border-radius: 10px;
-}
-
-.scrollable-sessions::-webkit-scrollbar-thumb:hover {
-    background-color: var(--text-secondary);
-}
-
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Page navigation styles */
-        .page {
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        .page.hidden {
-            display: none;
-        }
-
-        /* Smooth transitions for page switching */
-        .page-enter {
-            opacity: 0;
-            transform: translateX(20px);
-        }
-
-        .page-enter-active {
-            opacity: 1;
-            transform: translateX(0);
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        .page-exit {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .page-exit-active {
-            opacity: 0;
-            transform: translateX(-20px);
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        /* Back button hover effect */
-        .back-button:hover {
-            background-color: var(--secondary-color);
-            transform: translateX(-2px);
-        }
-
-        /* Detail page header styling */
-        .detail-header {
-            border-bottom: 1px solid var(--border-color);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
-        }
-
-        /* Enhanced site button hover effects */
-        .site-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .site-button:active {
-            transform: translateY(-1px) scale(1.02);
-        }
-
-        /* Loading state for page transitions */
-        .page-loading {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .page-loading::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: loading-shimmer 1.5s infinite;
-        }
-
-        @keyframes loading-shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        /* Responsive improvements */
-        @media (max-width: 384px) {
-            .site-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
 </head>
 
 <body class="w-96 min-h-screen">
     <main class="flex flex-col min-h-screen bg-gray-50" role="main">
-        
+
         <!-- /?@ Halaman Utama - Website Selection Grid -->
         <div id="main-page" class="page">
             <!-- Header Section -->
-        <header class="flex justify-between items-center p-4 pb-2" role="banner">
-            <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
-                <img 
-                    src="../assets/img/account-switcher.png" 
-                    alt="Account Switcher Logo" 
-                    class="w-6 h-6 flex-shrink-0"
-                />
-                <span>Account Switcher</span>
-            </h1>
-            
-            <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
-                <button 
-                    type="button"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                    aria-label="Add new session"
-                    data-action="add-session"
-                >
-                    <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
-                </button>
-                
-                <button 
-                    type="button"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                    aria-label="Save current session"
-                    data-action="save-session"
-                >
-                    <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
-                </button>
-            </nav>
-        </header>
+            <header class="flex justify-between items-center p-4 pb-2" role="banner">
+                <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
+                    <img src="../assets/img/account-switcher.png" alt="Account Switcher Logo"
+                        class="w-6 h-6 flex-shrink-0" />
+                    <span>Account Switcher</span>
+                </h1>
+
+                <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        aria-label="Add new session" data-action="add-session">
+                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
+                    </button>
+
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        aria-label="Save current session" data-action="save-session">
+                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
+                    </button>
+                </nav>
+            </header>
 
             <!-- Search Section -->
-        <section class="px-4 mb-4" role="search">
-            <div class="relative">
-                <label for="website-search" class="sr-only">Search for websites</label>
-                <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true">
-                    search
-                </span>
-                <input 
-                    id="website-search"
-                    type="search"
-                    class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all"
-                    placeholder="Find a website..."
-                    autocomplete="off"
-                    spellcheck="false"
-                    data-search="websites"
-                />
-            </div>
-        </section>
+            <section class="px-4 mb-4" role="search">
+                <div class="relative">
+                    <label for="website-search" class="sr-only">Search for websites</label>
+                    <span
+                        class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                        aria-hidden="true">
+                        search
+                    </span>
+                    <input id="website-search" type="search"
+                        class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all"
+                        placeholder="Find a website..." autocomplete="off" spellcheck="false" data-search="websites" />
+                </div>
+            </section>
 
             <!-- Website Selection Grid -->
             <section class="px-4 mb-6 " aria-labelledby="website-selection-heading">
-            <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
-            
-            <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
-                
+                <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
+
+                <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
+
                     <!-- Google -->
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
+                    <article class="flex justify-center">
+                        <button type="button"
                             class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Google account"
-                        data-site="google"
-                            data-site-name="Google"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4Fr_j7xxpDjlUJODZQhdhMhpt0iBFaSeeWX5PbS5RvrMJOmWu6pnq_mJawxgQOdU57fqtE9_cE6sV8jTzbx6AERgUfmlKRDXghm8AN_MiqfRs-hGIK4eR3SA76VFz0C7DQPIXqP09RB0hIU41CWznWffiETw2LXo2kIqvnjiatdyJ95bSVcNL4FMSmUSZ-cjlZ1FJSuwwCumgK1umthEas1loAUBfU599emysE3-Qh2Wxcd5pACQoOGn63E8oBiLAeuyvwDOS-wu_" 
-                            alt="Google"
-                            class="w-10 h-10"
-                            loading="eager"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
+                            aria-label="Switch to Google account" data-site="google" data-site-name="Google">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4Fr_j7xxpDjlUJODZQhdhMhpt0iBFaSeeWX5PbS5RvrMJOmWu6pnq_mJawxgQOdU57fqtE9_cE6sV8jTzbx6AERgUfmlKRDXghm8AN_MiqfRs-hGIK4eR3SA76VFz0C7DQPIXqP09RB0hIU41CWznWffiETw2LXo2kIqvnjiatdyJ95bSVcNL4FMSmUSZ-cjlZ1FJSuwwCumgK1umthEas1loAUBfU599emysE3-Qh2Wxcd5pACQoOGn63E8oBiLAeuyvwDOS-wu_"
+                                alt="Google" class="w-10 h-10" loading="eager" decoding="async" />
+                        </button>
+                    </article>
 
                     <!-- Facebook -->
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Facebook account"
-                        data-site="facebook"
-                            data-site-name="Facebook"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmumCPVjbe93NYeH4NQsKwAmPmxwUwTD7AtVSsbjcWA_N3s3mO5yegS9V_vF6-C0PI0ZrB50-NPWnhjY2jWi663OxbIqYPapKWOsIVGBe9xQfhTSiOefNhcZ4edwaoQPR--Z_0J-Lzg6TwwHo5OOZciEb2vs-LqgovZ7osPP2Uz3vIgKTMhr6hncvpNnIlsl7L0wuVvX-8o_9IjXlqAaR_QPJXtpbU2Ek_Z-kT_IiExaFjjda3vkNFr06AQbVe9GFA_m4NZRjSN_fr" 
-                            alt="Facebook"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
+                    <article class="flex justify-center">
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Facebook account" data-site="facebook" data-site-name="Facebook">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmumCPVjbe93NYeH4NQsKwAmPmxwUwTD7AtVSsbjcWA_N3s3mO5yegS9V_vF6-C0PI0ZrB50-NPWnhjY2jWi663OxbIqYPapKWOsIVGBe9xQfhTSiOefNhcZ4edwaoQPR--Z_0J-Lzg6TwwHo5OOZciEb2vs-LqgovZ7osPP2Uz3vIgKTMhr6hncvpNnIlsl7L0wuVvX-8o_9IjXlqAaR_QPJXtpbU2Ek_Z-kT_IiExaFjjda3vkNFr06AQbVe9GFA_m4NZRjSN_fr"
+                                alt="Facebook" class="w-10 h-10" loading="lazy" decoding="async" />
+                        </button>
+                    </article>
 
                     <!-- GitHub -->
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to GitHub account"
-                        data-site="github"
-                            data-site-name="GitHub"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEq0rSIfUhoRwRESiTgGaF5Ph42dHN5h7XOVIrAt4UZnkHOGcQWVRlziGFLHdPWoQEnBGbANNP2TelXUSrDlyxK9-z20RWmrnSzWNxzOlHPi0WsBqGWm5cfrbhNPHnAmKkpbLZWnVEaLTYqBMBbzGcn6rDPIRo2SCMIyCv7ZT34jiFggZSOkWSuSEDmEt_bP8z2R7e6-ckyrEVrWlI6LHs5CNcuOw7XGBINpNWV3MVlhhRYwQTZb6ta9F2QaZ9XeC1dSHlxqju8tes" 
-                            alt="GitHub"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
+                    <article class="flex justify-center">
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to GitHub account" data-site="github" data-site-name="GitHub">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEq0rSIfUhoRwRESiTgGaF5Ph42dHN5h7XOVIrAt4UZnkHOGcQWVRlziGFLHdPWoQEnBGbANNP2TelXUSrDlyxK9-z20RWmrnSzWNxzOlHPi0WsBqGWm5cfrbhNPHnAmKkpbLZWnVEaLTYqBMBbzGcn6rDPIRo2SCMIyCv7ZT34jiFggZSOkWSuSEDmEt_bP8z2R7e6-ckyrEVrWlI6LHs5CNcuOw7XGBINpNWV3MVlhhRYwQTZb6ta9F2QaZ9XeC1dSHlxqju8tes"
+                                alt="GitHub" class="w-10 h-10" loading="lazy" decoding="async" />
+                        </button>
+                    </article>
 
                     <!-- Twitter -->
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Twitter account"  
-                        data-site="twitter"
-                            data-site-name="Twitter"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9IiMOTFozXrCUeHdd97c8Echlnnc2du0LpM4jD7ssk1DninXsEM6J5jE_wEc0qyn85fWlN9gxDrJQC9tgSsAmBtItAleW9Bc6lJxX4wJeKTXxET-sBsB_iLzs-_Ydlrk1SbmxtBB54ptmgB5Mf9mrw2lO3dkUqyOngYEq_nl-pifmr0cUp_YqpflXuuLsFooXBcTSnRPl1XIAvSgWVGLLL6LGTtAOzIENL-RUDg4gvQoeH1tINXldzze8mKjsg67PRnwVaIOZb0U1" 
-                            alt="Twitter"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
+                    <article class="flex justify-center">
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Twitter account" data-site="twitter" data-site-name="Twitter">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9IiMOTFozXrCUeHdd97c8Echlnnc2du0LpM4jD7ssk1DninXsEM6J5jE_wEc0qyn85fWlN9gxDrJQC9tgSsAmBtItAleW9Bc6lJxX4wJeKTXxET-sBsB_iLzs-_Ydlrk1SbmxtBB54ptmgB5Mf9mrw2lO3dkUqyOngYEq_nl-pifmr0cUp_YqpflXuuLsFooXBcTSnRPl1XIAvSgWVGLLL6LGTtAOzIENL-RUDg4gvQoeH1tINXldzze8mKjsg67PRnwVaIOZb0U1"
+                                alt="Twitter" class="w-10 h-10" loading="lazy" decoding="async" />
+                        </button>
+                    </article>
 
                     <!-- Discord -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to Discord account" 
-                            data-site="discord"
-                            data-site-name="Discord"
-                        >
-                            <img 
-                                src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" 
-                                alt="Discord" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Discord account" data-site="discord" data-site-name="Discord">
+                            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"
+                                alt="Discord" class="w-10 h-10" loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- Notion -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to Notion account" 
-                            data-site="notion"
-                            data-site-name="Notion"
-                        >
-                            <img 
-                                src="https://www.notion.so/images/logo-ios.png" 
-                                alt="Notion" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Notion account" data-site="notion" data-site-name="Notion">
+                            <img src="https://www.notion.so/images/logo-ios.png" alt="Notion" class="w-10 h-10"
+                                loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- Figma -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to Figma account" 
-                            data-site="figma"
-                            data-site-name="Figma"
-                        >
-                            <img 
-                                src="https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/3000/figma-logo-512.png" 
-                                alt="Figma" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Figma account" data-site="figma" data-site-name="Figma">
+                            <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/3000/figma-logo-512.png"
+                                alt="Figma" class="w-10 h-10" loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- Trello -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to Trello account" 
-                            data-site="trello"
-                            data-site-name="Trello"
-                        >
-                            <img 
-                                src="https://cdn2.iconfinder.com/data/icons/social-icons-33/128/Trello-512.png" 
-                                alt="Trello" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Trello account" data-site="trello" data-site-name="Trello">
+                            <img src="https://cdn2.iconfinder.com/data/icons/social-icons-33/128/Trello-512.png"
+                                alt="Trello" class="w-10 h-10" loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- LinkedIn -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to LinkedIn account" 
-                            data-site="linkedin"
-                            data-site-name="LinkedIn"
-                        >
-                            <img 
-                                src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg" 
-                                alt="LinkedIn" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to LinkedIn account" data-site="linkedin" data-site-name="LinkedIn">
+                            <img src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"
+                                alt="LinkedIn" class="w-10 h-10" loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- Instagram -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to Instagram account" 
-                            data-site="instagram"
-                            data-site-name="Instagram"
-                        >
-                            <img 
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png" 
-                                alt="Instagram" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Instagram account" data-site="instagram" data-site-name="Instagram">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png"
+                                alt="Instagram" class="w-10 h-10" loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- YouTube -->
                     <article class="flex justify-center">
-                        <button 
-                            type="button" 
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring" 
-                            aria-label="Switch to YouTube account" 
-                            data-site="youtube"
-                            data-site-name="YouTube"
-                        >
-                            <img 
-                                src="https://www.youtube.com/img/desktop/yt_1200.png" 
-                                alt="YouTube" 
-                                class="w-10 h-10"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to YouTube account" data-site="youtube" data-site-name="YouTube">
+                            <img src="https://www.youtube.com/img/desktop/yt_1200.png" alt="YouTube" class="w-10 h-10"
+                                loading="lazy" decoding="async">
                         </button>
                     </article>
 
                     <!-- Slack -->
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Slack account"
-                        data-site="slack"
-                            data-site-name="Slack"
-                    >
-                        <img 
-                                src="https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png" 
-                            alt="Slack"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                            >
-                    </button>
-                </article>
-            </div>
-        </section>
-                                </div>
+                    <article class="flex justify-center">
+                        <button type="button"
+                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
+                            aria-label="Switch to Slack account" data-site="slack" data-site-name="Slack">
+                            <img src="https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png"
+                                alt="Slack" class="w-10 h-10" loading="lazy" decoding="async">
+                        </button>
+                    </article>
+                </div>
+            </section>
+        </div>
 
         <!-- /?@ Halaman Detail - Session List -->
         <div id="detail-page" class="page hidden">
             <!-- Header dengan tombol back -->
             <header class="flex items-center p-4 pb-2 detail-header" role="banner">
-                                    <button 
-                                        type="button"
+                <button type="button"
                     class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring mr-2 back-button"
-                    aria-label="Back to main page"
-                    data-action="back-to-main"
-                >
-                    <span class="material-symbols-rounded text-gray-600" aria-hidden="true">arrow_back</span>
-                                    </button>
-                                    
+                    aria-label="Back to main page" data-action="back-to-main">
+                    <span class="material-symbols-rounded text-gray-600 pt-2" aria-hidden="true">arrow_back</span>
+                </button>
+
                 <div class="flex items-center space-x-2 flex-1">
-                    <img 
-                        id="detail-site-icon"
-                        src="" 
-                        alt="" 
-                        class="w-6 h-6 flex-shrink-0"
-                    />
+                    <img id="detail-site-icon" src="" alt="" class="w-6 h-6 flex-shrink-0" />
                     <h1 id="detail-site-name" class="text-xl font-bold text-gray-800">Sessions</h1>
-                                </div>
+                </div>
 
                 <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
-                                    <button 
-                                        type="button"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        aria-label="Add new session"
-                        data-action="add-session"
-                                    >
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        aria-label="Add new session" data-action="add-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
-                                    </button>
-                                    
-                                    <button 
-                                        type="button"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        aria-label="Save current session"
-                        data-action="save-session"
-                                    >
+                    </button>
+
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        aria-label="Save current session" data-action="save-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
-                                    </button>
-                                </nav>
+                    </button>
+                </nav>
             </header>
 
             <!-- Sessions List -->
-            <section class="flex-grow px-4 pb-20" aria-labelledby="sessions-heading">
+            <section class="flex-grow px-4 pb-20 mt-4" aria-labelledby="sessions-heading">
                 <div class="glassmorphism p-4">
                     <header class="flex flex-col items-left mb-4">
                         <h2 id="sessions-heading" class="text-lg font-semibold text-gray-800">
@@ -597,58 +226,47 @@
                     <div class="scrollable-sessions" role="group" aria-labelledby="sessions-heading">
                         <ul id="sessions-list" class="space-y-3" role="list">
                             <!-- Sessions akan di-render secara dinamis -->
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
         </div>
 
     </main>
 
     <!-- /?@ Footer -->
-    <footer class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] h-12 flex items-center justify-between px-4 z-10" role="contentinfo">
+    <footer
+        class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] h-12 flex items-center justify-between px-4 z-10"
+        role="contentinfo">
         <!-- Left side: Help dan Settings icons -->
         <div class="flex items-center space-x-0 pt-2">
-            <button 
-                type="button"
-                class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Help center"
-                data-action="show-help"
-            >
+            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                aria-label="Help center" data-action="show-help">
                 <span class="material-symbols-rounded text-gray-600" aria-hidden="true">help_center</span>
             </button>
-    
-            <button 
-                type="button"
-                class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Settings"
-                data-action="show-settings"
-            >
+
+            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                aria-label="Settings" data-action="show-settings">
                 <span class="material-symbols-rounded text-gray-600" aria-hidden="true">settings</span>
             </button>
         </div>
-        
+
         <!-- Right side: Copyright text -->
         <p class="text-sm text-gray-500 flex items-center space-x-2">
             <span>© 2025 |</span>
-            <img 
-                src="../assets/img/logo-mini-qnr.svg" 
-                alt="QNR Logo"
-                class="w-3 h-3 flex-shrink-0 mt-1"
-            />
-            <a class="text-orange-500 hover:text-orange-700 transition-colors font-semibold" 
-               href="https://ogisetiawan.github.io" 
-               target="_blank" 
-               rel="noopener">
+            <img src="../assets/img/logo-mini-qnr.svg" alt="QNR Logo" class="w-3 h-3 flex-shrink-0 mt-1" />
+            <a class="text-orange-500 hover:text-orange-700 transition-colors font-semibold"
+                href="https://ogisetiawan.github.io" target="_blank" rel="noopener">
                 qnr.dev
             </a>
         </p>
-        
+
     </footer>
-    
+
 
     <!--//@ Loading overlay for better UX -->
-    <div id="loading-overlay" class="hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div id="loading-overlay"
+        class="hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 shadow-xl flex items-center space-x-3">
             <div class="loading"></div>
             <span class="text-gray-700">Switching session...</span>
@@ -658,4 +276,5 @@
     <!-- Scripts -->
     <script src="./extension.js" defer></script>
 </body>
+
 </html>
