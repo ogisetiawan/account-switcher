@@ -218,6 +218,7 @@ body {
 .site-button:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px var(--primary-color);
 }
 
 .site-button:active {
@@ -1208,6 +1209,10 @@ img, video {
 .text-gray-700 { color: #374151; }
 .text-orange-500 { color: #f97316; }
 .text-orange-700 { color: #c2410c; }
+.text-orange-800 {
+  --tw-text-opacity: 1;
+  color: rgb(154 52 18 / var(--tw-text-opacity, 1));
+}
 .border-gray-300 { border-color: #d1d5db; }
 
 /* Additional Colors for Footer */
@@ -1272,10 +1277,17 @@ img, video {
 .backdrop-blur-sm { backdrop-filter: blur(4px); }
 .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
 .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-
+.hover\:bg-orange-50:hover {--tw-bg-opacity: 1;background-color: rgb(255 247 237 / var(--tw-bg-opacity, 1));}
+.bg-orange-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 186 116 / var(--tw-bg-opacity, 1));
+}
 /* Focus States */
 .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
-.focus\:ring-2:focus { box-shadow: 0 0 0 2px #fdba74; }
+.focus\:ring-2:focus { 
+  /* box-shadow: 0 0 0 2px #fdba74; */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 
 /* Hover States */
 .hover\:bg-gray-200:hover { background-color: #e5e7eb; }

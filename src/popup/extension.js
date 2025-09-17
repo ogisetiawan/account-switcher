@@ -391,7 +391,7 @@ class SessionSwitcher {
                             <h3 class="font-medium text-gray-800 truncate">${session.email}</h3>
                             <p class="text-sm text-gray-500">
                                 <time datetime="${session.lastUsed}">Last used: ${this.formatLastUsed(session.lastUsed)}</time>
-                  ${session.active ? '<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">Active</span>' : ""}
+                  ${session.active ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">Active</span>' : ""}
                             </p>
                         </div>
                     </div>
