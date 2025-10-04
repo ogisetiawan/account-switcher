@@ -237,7 +237,7 @@ class SessionSwitcher {
     document.addEventListener("keydown", this.handleKeydown.bind(this));
 
     // Search functionality with debounce
-    const searchInput = document.querySelector('[data-search="websites"]');
+    const searchInput = document.querySelector("[data-search=\"websites\"]");
     if (searchInput) {
       searchInput.addEventListener("input", this.debounce(this.handleSearch.bind(this), 300));
     }
@@ -278,7 +278,7 @@ class SessionSwitcher {
       switch (event.key) {
         case "k":
           event.preventDefault();
-          document.querySelector('[data-search="websites"]').focus();
+          document.querySelector("[data-search=\"websites\"]").focus();
           break;
         case "n":
           event.preventDefault();
@@ -391,7 +391,7 @@ class SessionSwitcher {
                             <h3 class="font-medium text-gray-800 truncate">${session.email}</h3>
                             <p class="text-sm text-gray-500">
                                 <time datetime="${session.lastUsed}">Last used: ${this.formatLastUsed(session.lastUsed)}</time>
-                  ${session.active ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">Active</span>' : ""}
+                  ${session.active ? "<span class=\"inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800\">Active</span>" : ""}
                             </p>
                         </div>
                     </div>
@@ -450,12 +450,212 @@ class SessionSwitcher {
   // Fungsi-fungsi untuk session management
   addSession() {
     console.log("Add session clicked");
-    // Implementasi add session
+    this.showAddModal();
   }
 
   saveSession() {
     console.log("Save session clicked");
-    // Implementasi save session
+  }
+
+  showAddModal() {
+    const modal = document.getElementById("addModal");
+    const websiteUrlInput = document.getElementById("websiteUrl");
+    const sessionNameInput = document.getElementById("sessionName");
+
+    // Get current tab URL for autofill
+    this.getCurrentTabUrl().then(url => {
+      if (websiteUrlInput) {
+        websiteUrlInput.value = url || "";
+      }
+    });
+
+    // Show modal
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      // Focus on session name input
+      if (sessionNameInput) {
+        sessionNameInput.focus();
+        sessionNameInput.select();
+      }
+    }
+
+    // Bind modal events
+    this.bindModalEvents();
+  }
+
+  hideAddModal() {
+    const modal = document.getElementById("addModal");
+    if (modal) {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+  }
+
+  bindModalEvents() {
+    const modal = document.getElementById("addModal");
+    const closeBtn = document.getElementById("closeAddModal");
+    const cancelBtn = document.getElementById("cancelAdd");
+    const saveBtn = document.getElementById("saveAdd");
+    const websiteUrlInput = document.getElementById("websiteUrl");
+    const sessionNameInput = document.getElementById("sessionName");
+
+    // Close modal events
+    const closeModal = () => this.hideAddModal();
+
+    if (closeBtn) {
+      closeBtn.onclick = closeModal;
+    }
+
+    if (cancelBtn) {
+      cancelBtn.onclick = closeModal;
+    }
+
+    // Close modal when clicking outside
+    if (modal) {
+      modal.onclick = (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      };
+    }
+
+    // Confirm save event
+    if (saveBtn) {
+      saveBtn.onclick = () => this.handleSaveSession();
+    }
+
+    // Enter key events
+    if (websiteUrlInput) {
+      websiteUrlInput.onkeydown = (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          this.handleSaveSession();
+        }
+      };
+    }
+
+    if (sessionNameInput) {
+      sessionNameInput.onkeydown = (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          this.handleSaveSession();
+        }
+      };
+    }
+
+    // Escape key to close modal
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+        document.removeEventListener("keydown", handleEscape);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+  }
+
+  async getCurrentTabUrl() {
+    try {
+      if (typeof chrome !== "undefined" && chrome.tabs) {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        return tabs[0]?.url || "";
+      }
+      return window.location.href || "";
+    } catch (error) {
+      console.error("Error getting current tab URL:", error);
+      return "";
+    }
+  }
+
+  handleSaveSession() {
+    const websiteUrlInput = document.getElementById("websiteUrl");
+    const sessionNameInput = document.getElementById("sessionName");
+
+    const websiteUrl = websiteUrlInput?.value?.trim() || "";
+    const sessionName = sessionNameInput?.value?.trim() || "";
+
+    // Validation
+    if (!websiteUrl) {
+      alert("Please enter a website URL");
+      websiteUrlInput?.focus();
+      return;
+    }
+
+    if (!sessionName) {
+      alert("Please enter a session name");
+      sessionNameInput?.focus();
+      return;
+    }
+
+    // Validate URL format
+    try {
+      new URL(websiteUrl);
+    } catch (_error) {
+      alert("Please enter a valid URL");
+      websiteUrlInput?.focus();
+      return;
+    }
+
+    // Save session data
+    this.saveSessionData(websiteUrl, sessionName);
+
+    // Close modal
+    this.hideAddModal();
+
+    // Show success message
+    this.showSuccessMessage(`Session "${sessionName}" saved successfully!`);
+  }
+
+  saveSessionData(websiteUrl, sessionName) {
+    // Create session data
+    const sessionData = {
+      id: Date.now().toString(),
+      websiteUrl: websiteUrl,
+      sessionName: sessionName,
+      createdAt: new Date().toISOString(),
+      lastUsed: new Date().toISOString(),
+      active: false
+    };
+
+    // Save to storage
+    this.saveToStorage(sessionData);
+
+    console.log("Session saved:", sessionData);
+  }
+
+  async saveToStorage(sessionData) {
+    try {
+      if (typeof chrome !== "undefined" && chrome.storage) {
+        const result = await chrome.storage.local.get(["savedSessions"]);
+        const sessions = result.savedSessions || [];
+        sessions.push(sessionData);
+        await chrome.storage.local.set({ savedSessions: sessions });
+      } else {
+        // Fallback to localStorage for testing
+        const sessions = JSON.parse(localStorage.getItem("savedSessions") || "[]");
+        sessions.push(sessionData);
+        localStorage.setItem("savedSessions", JSON.stringify(sessions));
+      }
+    } catch (error) {
+      console.error("Error saving session:", error);
+    }
+  }
+
+  showSuccessMessage(message) {
+    // Create temporary success message
+    const successDiv = document.createElement("div");
+    successDiv.className = "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50";
+    successDiv.textContent = message;
+
+    document.body.appendChild(successDiv);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      if (successDiv.parentNode) {
+        successDiv.parentNode.removeChild(successDiv);
+      }
+    }, 3000);
   }
 
   editSession(email) {

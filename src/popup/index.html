@@ -13,9 +13,9 @@
 
 <body class="w-96 min-h-screen">
     <main class="flex flex-col bg-gray-50" role="main">
-        <!-- /?@ Halaman Utama - Website Selection Grid -->
+        <!-- /?@ Main Page - Website Selection Grid -->
         <div id="main-page" class="page">
-            <!-- Header Section -->
+            <!--//?  Header Section -->
             <header class="flex justify-between items-center p-4 pb-2" role="banner">
                 <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
                     <img src="../assets/img/account-switcher.png" alt="Account Switcher Logo"
@@ -24,7 +24,7 @@
                 </h1>
 
                 <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
-                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                    <button type="button" id="addBtn" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
                         aria-label="Add new session" data-action="add-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
                     </button>
@@ -36,7 +36,7 @@
                 </nav>
             </header>
 
-            <!-- Search Section -->
+            <!--//? Search Section -->
             <section class="px-4 mb-4" role="search">
                 <div class="relative">
                     <label for="website-search" class="sr-only">Search for websites</label>
@@ -51,7 +51,7 @@
                 </div>
             </section>
 
-            <!-- Website Selection Grid -->
+            <!--//? Website Selection Grid -->
             <section class="px-4 mb-6 " aria-labelledby="website-selection-heading">
                 <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
 
@@ -182,7 +182,7 @@
 
         <!-- /?@ Halaman Detail - Session List -->
         <div id="detail-page" class="page hidden">
-            <!-- Header dengan tombol back -->
+            <!--//? Header with back button -->
             <header class="flex items-center p-4 pb-2 detail-header" role="banner">
                 <button type="button"
                     class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring mr-2 back-button"
@@ -208,7 +208,7 @@
                 </nav>
             </header>
 
-            <!-- Sessions List -->
+            <!--//? Sessions List -->
             <section class="flex-grow px-4 pb-20 mt-4" aria-labelledby="sessions-heading">
                 <div class="glassmorphism p-4">
                     <header class="flex flex-col items-left mb-4">
@@ -220,10 +220,10 @@
                         </div>
                     </header>
 
-                    <!-- Sessions List Container -->
+                    <!--//?  Sessions List Container -->
                     <div class="scrollable-sessions" role="group" aria-labelledby="sessions-heading">
                         <ul id="sessions-list" class="space-y-3" role="list">
-                            <!-- Sessions akan di-render secara dinamis -->
+                            <!--//? Sessions will be rendered dynamically -->
                         </ul>
                     </div>
                 </div>
@@ -270,8 +270,42 @@
         </div>
     </div>
 
+    <!-- Save Session Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Save Session</h3>
+                <button id="closeAddModal" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="mb-4">
+                    <label for="websiteUrl" class="block text-sm font-medium text-gray-700 mb-2">Website URL</label>
+                    <input type="url" id="websiteUrl" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="https://example.com">
+                </div>
+                <div class="mb-6">
+                    <label for="sessionName" class="block text-sm font-medium text-gray-700 mb-2">Session Name</label>
+                    <input type="text" id="sessionName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="My Session">
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2 p-6 border-t border-gray-200">
+                <button id="cancelAdd" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="saveAdd" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
+                    <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!--//@ Scripts -->
     <script src="./extension.js" defer></script>
+    <!-- <script src="./index.js" defer></script> -->
 </body>
 
 </html>
