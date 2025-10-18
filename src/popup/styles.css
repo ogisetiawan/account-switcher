@@ -3539,6 +3539,10 @@ video {
     color: rgb(154 52 18 / var(--tw-text-opacity, 1));
 }
 
+.text-red-600 {
+    color: #dc2626;
+}
+
 .border-gray-300 {
     border-color: #d1d5db;
 }
@@ -4028,6 +4032,92 @@ video {
     gap: 0.75rem;
     padding: 1.5rem;
     border-top: 1px solid #e5e7eb;
+}
+
+/* Additional flex utilities for modal buttons */
+.modal-flex {
+    display: flex;
+}
+
+.modal-justify-end {
+    justify-content: flex-end;
+}
+
+/* Modal blur effect */
+.modal-blur-background {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: backdrop-filter 0.3s ease, background-color 0.3s ease;
+}
+
+.modal-blur-background.active {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Enhanced modal animation */
+.modal-enter {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+}
+
+.modal-enter-active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.modal-exit {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.modal-exit-active {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+}
+
+/* Error message styling */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+.error-message::before {
+    content: "⚠";
+    font-size: 0.875rem;
+    color: #dc2626;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+/* Input error state */
+.input-error {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.input-error:focus {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .btn {

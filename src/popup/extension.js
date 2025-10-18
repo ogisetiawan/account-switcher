@@ -10,7 +10,7 @@ class SessionSwitcher {
   init() {
     this.initializeStaticData();
     this.bindEvents();
-    this.loadSessions();
+    // this.loadSessions();
     this.setupKeyboardNavigation();
     this.showPage("main");
   }
@@ -237,10 +237,10 @@ class SessionSwitcher {
     document.addEventListener("keydown", this.handleKeydown.bind(this));
 
     // Search functionality with debounce
-    const searchInput = document.querySelector("[data-search=\"websites\"]");
-    if (searchInput) {
-      searchInput.addEventListener("input", this.debounce(this.handleSearch.bind(this), 300));
-    }
+    // const searchInput = document.querySelector("[data-search=\"websites\"]");
+    // if (searchInput) {
+    //   searchInput.addEventListener("input", this.debounce(this.handleSearch.bind(this), 300));
+    // }
   }
 
   handleClick(event) {
@@ -447,20 +447,23 @@ class SessionSwitcher {
     }
   }
 
-  // Fungsi-fungsi untuk session management
+  //? function for session management
   addSession() {
     console.log("Add session clicked");
-    this.showAddModal();
   }
 
   saveSession() {
     console.log("Save session clicked");
+    this.showSaveSessionModal();
   }
 
-  showAddModal() {
-    const modal = document.getElementById("addModal");
+  showSaveSessionModal() {
+    const modal = document.getElementById("saveModal");
     const websiteUrlInput = document.getElementById("websiteUrl");
     const sessionNameInput = document.getElementById("sessionName");
+
+    // Clear any previous validation errors
+    this.clearValidationErrors();
 
     // Get current tab URL for autofill
     this.getCurrentTabUrl().then(url => {
@@ -469,40 +472,61 @@ class SessionSwitcher {
       }
     });
 
-    // Show modal
+    // Show modal with animation
     if (modal) {
       modal.classList.remove("hidden");
-      modal.classList.add("flex");
+      modal.classList.add("flex", "modal-enter");
+      // Add active blur effect
+      modal.classList.add("active");
 
-      // Focus on session name input
-      if (sessionNameInput) {
-        sessionNameInput.focus();
-        sessionNameInput.select();
-      }
+      // Trigger animation
+      requestAnimationFrame(() => {
+        modal.classList.remove("modal-enter");
+        modal.classList.add("modal-enter-active");
+      });
+
+      // Focus on session name input after animation
+      setTimeout(() => {
+        if (sessionNameInput) {
+          sessionNameInput.focus();
+          sessionNameInput.select();
+        }
+      }, 100);
     }
 
     // Bind modal events
     this.bindModalEvents();
   }
 
-  hideAddModal() {
-    const modal = document.getElementById("addModal");
+  hideSaveModal() {
+    const modal = document.getElementById("saveModal");
     if (modal) {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
+      // Start exit animation
+      modal.classList.remove("modal-enter-active");
+      modal.classList.add("modal-exit");
+
+      // Remove active blur effect
+      modal.classList.remove("active");
+
+      // Complete animation and hide modal
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex", "modal-exit", "modal-exit-active");
+        modal.classList.remove("modal-enter", "modal-enter-active");
+      }, 200);
     }
   }
 
   bindModalEvents() {
-    const modal = document.getElementById("addModal");
-    const closeBtn = document.getElementById("closeAddModal");
-    const cancelBtn = document.getElementById("cancelAdd");
-    const saveBtn = document.getElementById("saveAdd");
+    const modal = document.getElementById("saveModal");
+    const closeBtn = document.getElementById("closeSaveModal");
+    const cancelBtn = document.getElementById("cancelSaveModal");
+    const saveBtn = document.getElementById("saveSaveModal");
     const websiteUrlInput = document.getElementById("websiteUrl");
     const sessionNameInput = document.getElementById("sessionName");
 
     // Close modal events
-    const closeModal = () => this.hideAddModal();
+    const closeModal = () => this.hideSaveModal();
 
     if (closeBtn) {
       closeBtn.onclick = closeModal;
@@ -534,6 +558,17 @@ class SessionSwitcher {
           this.handleSaveSession();
         }
       };
+
+      // Clear error when user starts typing
+      websiteUrlInput.oninput = () => {
+        if (websiteUrlInput.classList.contains("input-error")) {
+          websiteUrlInput.classList.remove("input-error");
+          const errorElement = document.getElementById("websiteUrlError");
+          if (errorElement) {
+            errorElement.classList.add("hidden");
+          }
+        }
+      };
     }
 
     if (sessionNameInput) {
@@ -541,6 +576,17 @@ class SessionSwitcher {
         if (e.key === "Enter") {
           e.preventDefault();
           this.handleSaveSession();
+        }
+      };
+
+      // Clear error when user starts typing
+      sessionNameInput.oninput = () => {
+        if (sessionNameInput.classList.contains("input-error")) {
+          sessionNameInput.classList.remove("input-error");
+          const errorElement = document.getElementById("sessionNameError");
+          if (errorElement) {
+            errorElement.classList.add("hidden");
+          }
         }
       };
     }
@@ -571,29 +617,39 @@ class SessionSwitcher {
   handleSaveSession() {
     const websiteUrlInput = document.getElementById("websiteUrl");
     const sessionNameInput = document.getElementById("sessionName");
+    const websiteUrlError = document.getElementById("websiteUrlError");
+    const sessionNameError = document.getElementById("sessionNameError");
 
     const websiteUrl = websiteUrlInput?.value?.trim() || "";
     const sessionName = sessionNameInput?.value?.trim() || "";
 
-    // Validation
+    // Clear previous errors
+    this.clearValidationErrors();
+
+    let hasErrors = false;
+
+    // Validation for Website Address
     if (!websiteUrl) {
-      alert("Please enter a website URL");
-      websiteUrlInput?.focus();
-      return;
+      this.showFieldError(websiteUrlInput, websiteUrlError, "Please enter a website address");
+      hasErrors = true;
+    } else {
+      // Validate URL format
+      try {
+        new URL(websiteUrl);
+      } catch (_error) {
+        this.showFieldError(websiteUrlInput, websiteUrlError, "Please enter a valid website address");
+        hasErrors = true;
+      }
     }
 
+    // Validation for Session Name
     if (!sessionName) {
-      alert("Please enter a session name");
-      sessionNameInput?.focus();
-      return;
+      this.showFieldError(sessionNameInput, sessionNameError, "Please enter a session name");
+      hasErrors = true;
     }
 
-    // Validate URL format
-    try {
-      new URL(websiteUrl);
-    } catch (_error) {
-      alert("Please enter a valid URL");
-      websiteUrlInput?.focus();
+    // If there are errors, don't proceed
+    if (hasErrors) {
       return;
     }
 
@@ -601,10 +657,41 @@ class SessionSwitcher {
     this.saveSessionData(websiteUrl, sessionName);
 
     // Close modal
-    this.hideAddModal();
+    this.hideSaveModal();
 
     // Show success message
-    this.showSuccessMessage(`Session "${sessionName}" saved successfully!`);
+    console.log(`Session "${sessionName}" saved successfully!`);
+  }
+
+  clearValidationErrors() {
+    const websiteUrlInput = document.getElementById("websiteUrl");
+    const sessionNameInput = document.getElementById("sessionName");
+    const websiteUrlError = document.getElementById("websiteUrlError");
+    const sessionNameError = document.getElementById("sessionNameError");
+
+    // Remove error classes from inputs
+    websiteUrlInput?.classList.remove("input-error");
+    sessionNameInput?.classList.remove("input-error");
+
+    // Hide error messages
+    if (websiteUrlError) {
+      websiteUrlError.classList.add("hidden");
+      websiteUrlError.textContent = "";
+    }
+    if (sessionNameError) {
+      sessionNameError.classList.add("hidden");
+      sessionNameError.textContent = "";
+    }
+  }
+
+  showFieldError(inputElement, errorElement, message) {
+    if (inputElement) {
+      inputElement.classList.add("input-error");
+    }
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.classList.remove("hidden");
+    }
   }
 
   saveSessionData(websiteUrl, sessionName) {
@@ -640,22 +727,6 @@ class SessionSwitcher {
     } catch (error) {
       console.error("Error saving session:", error);
     }
-  }
-
-  showSuccessMessage(message) {
-    // Create temporary success message
-    const successDiv = document.createElement("div");
-    successDiv.className = "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50";
-    successDiv.textContent = message;
-
-    document.body.appendChild(successDiv);
-
-    // Remove after 3 seconds
-    setTimeout(() => {
-      if (successDiv.parentNode) {
-        successDiv.parentNode.removeChild(successDiv);
-      }
-    }, 3000);
   }
 
   editSession(email) {
