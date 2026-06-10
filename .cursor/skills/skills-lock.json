@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "chrome-extension-development": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "chrome-extension-development/SKILL.md",
+      "computedHash": "879436797b8c35a063dc89a04b4182975114c5baf9dbf692455b7ed164420f9e"
+    },
+    "typescript-pro": {
+      "source": "jeffallan/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/typescript-pro/SKILL.md",
+      "computedHash": "c6fb76eac620470f63ad24e3b35760f12624072f75d5b43b4f00bb9961f08bec"
+    }
+  }
+}
