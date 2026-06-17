@@ -137,7 +137,7 @@ body {
 /* Styling untuk Sessions List yang dapat di-scroll */
 .scrollable-sessions {
     /* Perkiraan tinggi untuk 4 item: (tinggi item ~4.2rem * 4) + (jarak antar item 0.75rem * 3) */
-    max-height: 18.3rem;
+    max-height: 250px;
     overflow-y: auto;
     padding-right: 8px;
     margin-right: -8px;
@@ -3829,6 +3829,33 @@ video {
     gap: 1rem;
 }
 
+.empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2.5rem 1rem;
+    min-height: 12rem;
+}
+
+.empty-state__image {
+    width: 9rem;
+    max-width: 70%;
+    height: auto;
+    margin-bottom: 1rem;
+    opacity: 0.92;
+}
+
+.empty-state__text {
+    margin: 0;
+    max-width: 16rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
 .site-button {
     width: 4rem;
     height: 4rem;
@@ -3839,19 +3866,6 @@ video {
     align-items: center;
     justify-content: center;
 }
-
-.scrollable-sessions {
-    max-height: 18.3rem;
-    overflow-y: auto;
-    padding-right: 8px;
-    margin-right: -8px;
-}
-
-/* Additional utility classes */
-.flex-grow {
-    flex-grow: 1;
-}
-
 .pt-2 {
     padding-top: 0.5rem;
 }
@@ -4324,4 +4338,74 @@ video {
 
 [data-action="delete-session"]:hover .material-symbols-rounded {
     color: #ef4444 !important; /* Red for delete */
+}
+
+span#session-count {
+    color: var(--primary-color);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* ===========================================
+   TOAST NOTIFICATION
+   =========================================== */
+/* Base toast - hidden by default, centered at bottom */
+#toast {
+    position: fixed;
+    bottom: 4.5rem; /* positioned above the footer */
+    left: 50%;
+    transform: translateX(-50%) translateY(1rem);
+    z-index: 100;
+    max-width: 22rem;
+    width: calc(100% - 2rem);
+    text-align: center;
+    color: #fff;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Visible state */
+#toast.toast--visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* Toast type: info (default) */
+#toast.toast--info {
+    background: #1f2937;
+}
+
+/* Toast type: success */
+#toast.toast--success {
+    background: #065f46;
+}
+
+#toast.toast--success::before {
+    content: "✓ ";
+}
+
+/* Toast type: error */
+#toast.toast--error {
+    background: #991b1b;
+}
+
+#toast.toast--error::before {
+    content: "✕ ";
+}
+
+/* Toast type: warning */
+#toast.toast--warning {
+    background: #92400e;
+}
+
+#toast.toast--warning::before {
+    content: "⚠ ";
 }

@@ -1,6 +1,7 @@
 import { handleError } from "@shared/utils/errorHandling";
 import { SessionData } from "@shared/types";
 import { PopupService } from "./services/popup.service";
+import { ToastManager } from "./components/toastManager";
 import { escapeHtml, getElementByIdSafe, querySelector } from "./utils/dom";
 
 type Page = "main" | "detail";
@@ -46,8 +47,7 @@ class PopupController {
   private deleteModal = getElementByIdSafe("deleteModal");
   private deleteSessionName = getElementByIdSafe("deleteSessionName");
 
-  private toast = getElementByIdSafe("toast");
-  private toastTimer?: ReturnType<typeof setTimeout>;
+  private toastManager: ToastManager;
 
   constructor() {
     this.isExtensionEnvironment =
@@ -57,6 +57,7 @@ class PopupController {
       console.warn("Running in non-extension environment - some features may not work");
     }
 
+    this.toastManager = new ToastManager();
     this.setupEventListeners();
   }
 
@@ -224,10 +225,9 @@ class PopupController {
     );
 
     if (entries.length === 0) {
-      this.siteGrid.innerHTML = `
-        <p class="col-span-4 text-center text-sm text-gray-500 py-8">
-          ${this.searchQuery ? "No websites match your search." : "No saved sessions yet. Open a website and press Save."}
-        </p>`;
+      this.siteGrid.innerHTML = this.renderEmptyState(
+        this.searchQuery ? "No websites match your search." : "No saved sessions yet. Open a website and press Save."
+      );
       return;
     }
 
@@ -251,6 +251,14 @@ class PopupController {
         </article>`;
       })
       .join("");
+  }
+
+  private renderEmptyState(message: string): string {
+    return `
+      <div class="empty-state">
+        <img src="../assets/img/file-search.svg" alt="" class="empty-state__image" aria-hidden="true" />
+        <p class="empty-state__text">${escapeHtml(message)}</p>
+      </div>`;
   }
 
   private navigateToDetail(domain: string): void {
@@ -297,7 +305,7 @@ class PopupController {
               <h3 class="font-medium text-gray-800 truncate">${safeName}</h3>
               <p class="text-sm text-gray-500">
                 <time datetime="${new Date(session.lastUsed).toISOString()}">Last used: ${this.formatLastUsed(session.lastUsed)}</time>
-                ${isActive ? "<span class=\"ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800\">Active</span>" : ""}
+                ${isActive ? "<span class=\"inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800\">Active</span>" : ""}
               </p>
             </div>
           </div>
@@ -509,10 +517,7 @@ class PopupController {
   }
 
   private showToast(message: string): void {
-    this.toast.textContent = message;
-    this.toast.classList.remove("hidden");
-    if (this.toastTimer) clearTimeout(this.toastTimer);
-    this.toastTimer = setTimeout(() => this.toast.classList.add("hidden"), 3200);
+    this.toastManager.show(message);
   }
 }
 
