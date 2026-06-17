@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="styles.css" />
     <!-- <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> -->
 
-<body class="w-96 min-h-screen">
-    <main class="flex flex-col bg-gray-50" role="main">
+<body class="w-96 min-h-screen flex flex-col">
+    <main class="flex flex-col flex-grow bg-gray-50" role="main">
         <!-- /?@ Main Page - Website Selection Grid -->
         <div id="main-page" class="page">
             <!--//?  Header Section -->
@@ -25,12 +25,12 @@
 
                 <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
                     <button type="button" id="addBtn" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        aria-label="Add new session" data-action="add-session">
+                        title="Add session" aria-label="Add new session" data-action="add-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
                     </button>
 
                     <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        aria-label="Save current session" data-action="save-session">
+                        title="Save session" aria-label="Save current session" data-action="save-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
                     </button>
                 </nav>
@@ -57,125 +57,6 @@
 
                 <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
 
-                    <!-- Google -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Google account" data-site="google" data-site-name="Google">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4Fr_j7xxpDjlUJODZQhdhMhpt0iBFaSeeWX5PbS5RvrMJOmWu6pnq_mJawxgQOdU57fqtE9_cE6sV8jTzbx6AERgUfmlKRDXghm8AN_MiqfRs-hGIK4eR3SA76VFz0C7DQPIXqP09RB0hIU41CWznWffiETw2LXo2kIqvnjiatdyJ95bSVcNL4FMSmUSZ-cjlZ1FJSuwwCumgK1umthEas1loAUBfU599emysE3-Qh2Wxcd5pACQoOGn63E8oBiLAeuyvwDOS-wu_"
-                                alt="Google" class="w-10 h-10" loading="eager" decoding="async" />
-                        </button>
-                    </article>
-
-                    <!-- Facebook -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Facebook account" data-site="facebook" data-site-name="Facebook">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmumCPVjbe93NYeH4NQsKwAmPmxwUwTD7AtVSsbjcWA_N3s3mO5yegS9V_vF6-C0PI0ZrB50-NPWnhjY2jWi663OxbIqYPapKWOsIVGBe9xQfhTSiOefNhcZ4edwaoQPR--Z_0J-Lzg6TwwHo5OOZciEb2vs-LqgovZ7osPP2Uz3vIgKTMhr6hncvpNnIlsl7L0wuVvX-8o_9IjXlqAaR_QPJXtpbU2Ek_Z-kT_IiExaFjjda3vkNFr06AQbVe9GFA_m4NZRjSN_fr"
-                                alt="Facebook" class="w-10 h-10" loading="lazy" decoding="async" />
-                        </button>
-                    </article>
-
-                    <!-- GitHub -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to GitHub account" data-site="github" data-site-name="GitHub">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEq0rSIfUhoRwRESiTgGaF5Ph42dHN5h7XOVIrAt4UZnkHOGcQWVRlziGFLHdPWoQEnBGbANNP2TelXUSrDlyxK9-z20RWmrnSzWNxzOlHPi0WsBqGWm5cfrbhNPHnAmKkpbLZWnVEaLTYqBMBbzGcn6rDPIRo2SCMIyCv7ZT34jiFggZSOkWSuSEDmEt_bP8z2R7e6-ckyrEVrWlI6LHs5CNcuOw7XGBINpNWV3MVlhhRYwQTZb6ta9F2QaZ9XeC1dSHlxqju8tes"
-                                alt="GitHub" class="w-10 h-10" loading="lazy" decoding="async" />
-                        </button>
-                    </article>
-
-                    <!-- Twitter -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Twitter account" data-site="twitter" data-site-name="Twitter">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9IiMOTFozXrCUeHdd97c8Echlnnc2du0LpM4jD7ssk1DninXsEM6J5jE_wEc0qyn85fWlN9gxDrJQC9tgSsAmBtItAleW9Bc6lJxX4wJeKTXxET-sBsB_iLzs-_Ydlrk1SbmxtBB54ptmgB5Mf9mrw2lO3dkUqyOngYEq_nl-pifmr0cUp_YqpflXuuLsFooXBcTSnRPl1XIAvSgWVGLLL6LGTtAOzIENL-RUDg4gvQoeH1tINXldzze8mKjsg67PRnwVaIOZb0U1"
-                                alt="Twitter" class="w-10 h-10" loading="lazy" decoding="async" />
-                        </button>
-                    </article>
-
-                    <!-- Discord -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Discord account" data-site="discord" data-site-name="Discord">
-                            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"
-                                alt="Discord" class="w-10 h-10" loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- Notion -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Notion account" data-site="notion" data-site-name="Notion">
-                            <img src="https://www.notion.so/images/logo-ios.png" alt="Notion" class="w-10 h-10"
-                                loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- Figma -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Figma account" data-site="figma" data-site-name="Figma">
-                            <img src="https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/3000/figma-logo-512.png"
-                                alt="Figma" class="w-10 h-10" loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- Trello -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Trello account" data-site="trello" data-site-name="Trello">
-                            <img src="https://cdn2.iconfinder.com/data/icons/social-icons-33/128/Trello-512.png"
-                                alt="Trello" class="w-10 h-10" loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- LinkedIn -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to LinkedIn account" data-site="linkedin" data-site-name="LinkedIn">
-                            <img src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg"
-                                alt="LinkedIn" class="w-10 h-10" loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- Instagram -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Instagram account" data-site="instagram" data-site-name="Instagram">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png"
-                                alt="Instagram" class="w-10 h-10" loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- YouTube -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to YouTube account" data-site="youtube" data-site-name="YouTube">
-                            <img src="https://www.youtube.com/img/desktop/yt_1200.png" alt="YouTube" class="w-10 h-10"
-                                loading="lazy" decoding="async">
-                        </button>
-                    </article>
-
-                    <!-- Slack -->
-                    <article class="flex justify-center">
-                        <button type="button"
-                            class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                            aria-label="Switch to Slack account" data-site="slack" data-site-name="Slack">
-                            <img src="https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png"
-                                alt="Slack" class="w-10 h-10" loading="lazy" decoding="async">
-                        </button>
-                    </article>
                 </div>
             </section>
         </div>
@@ -186,7 +67,7 @@
             <header class="flex items-center p-4 pb-2 detail-header" role="banner">
                 <button type="button"
                     class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring mr-2 back-button"
-                    aria-label="Back to main page" data-action="back-to-main">
+                    title="Back" aria-label="Back to main page" data-action="back-to-main">
                     <span class="material-symbols-rounded text-gray-600 pt-2" aria-hidden="true">arrow_back</span>
                 </button>
 
@@ -197,12 +78,12 @@
 
                 <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
                     <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        aria-label="Add new session" data-action="add-session">
+                        title="Add session" aria-label="Add new session" data-action="add-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
                     </button>
 
                     <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        aria-label="Save current session" data-action="save-session">
+                        title="Save session" aria-label="Save current session" data-action="save-session">
                         <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
                     </button>
                 </nav>
@@ -233,17 +114,17 @@
 
     <!-- /?@ Footer -->
     <footer
-        class="w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] flex items-center justify-between px-4 z-10"
+        class="w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] flex items-center justify-between px-4 py-2 mt-auto z-10"
         role="contentinfo">
         <!-- //? Left side: Help dan Settings icons -->
         <div class="flex items-center space-x-0">
             <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Help center" data-action="show-help">
+                title="Help" aria-label="Help center" data-action="show-help">
                 <span class="material-symbols-rounded text-gray-600" aria-hidden="true">help_center</span>
             </button>
 
             <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Settings" data-action="show-settings">
+                title="Settings" aria-label="Settings" data-action="show-settings">
                 <span class="material-symbols-rounded text-gray-600" aria-hidden="true">settings</span>
             </button>
         </div>
@@ -275,7 +156,7 @@
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-900">Save Session</h3>
-                <button id="closeSaveModal" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                <button id="closeSaveModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -294,10 +175,10 @@
                 </div>
             </div>
             <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
-                <button id="cancelSaveModal" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                <button id="cancelSaveModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
                     Cancel
                 </button>
-                <button id="saveSaveModal" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
+                <button id="saveSaveModal" title="Save session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
                     <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
                     <span>Save</span>
                 </button>
@@ -305,9 +186,72 @@
         </div>
     </div>
 
+    <!-- //@ Rename Session Modal -->
+    <div id="renameModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Rename Session</h3>
+                <button id="closeRenameModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="mb-2">
+                    <label for="renameSessionName" class="block text-sm font-medium text-gray-700 mb-2">Session Name</label>
+                    <input type="text" id="renameSessionName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="My Session">
+                    <div id="renameNameError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+                </div>
+            </div>
+            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
+                <button id="cancelRenameModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="confirmRenameModal" title="Rename session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
+                    <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
+                    <span>Rename</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- //@ Delete Session Modal -->
+    <div id="deleteModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Delete Session</h3>
+                <button id="closeDeleteModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600">
+                    Are you sure you want to delete
+                    <span id="deleteSessionName" class="font-semibold text-gray-900"></span>? This action cannot be undone.
+                </p>
+            </div>
+            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
+                <button id="cancelDeleteModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="confirmDeleteModal" title="Delete session" class="glassmorphism-btn px-4 py-2 text-sm font-medium text-white rounded-lg bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 flex items-center space-x-1">
+                    <span class="material-symbols-rounded text-lg" aria-hidden="true">delete</span>
+                    <span>Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- //@ Toast notification -->
+    <div id="toast" role="status" aria-live="polite"
+        class="hidden fixed bottom-16 left-1/2 -translate-x-1/2 z-50 max-w-[22rem] text-center bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+    </div>
+
     <!--//@ Scripts -->
-    <script src="./extension.js" defer></script>
-    <!-- <script src="./index.js" defer></script> -->
+    <script src="./index.js" defer></script>
 </body>
 
 </html>

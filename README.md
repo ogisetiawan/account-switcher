@@ -85,6 +85,10 @@ yarn clean
 ## Project Structure
 
 - `src/` - Source code
+- `src/index-old.html` - Source code v1
+- `src/index.ts` - Source code function for v1
+- `src/index-new.html` - Source code v2
+- `src/extension.js` - Source code function for v2
 - `build/` - Build scripts
 - `dist/` - Built extension files
 - `src/manifest.chrome.json` - Chrome manifest

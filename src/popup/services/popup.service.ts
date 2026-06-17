@@ -106,21 +106,28 @@ export class PopupService {
         throw new ExtensionError("Session not found");
       }
 
+      // Resolve the tab to operate on: reuse the current tab when its domain
+      // matches, otherwise find or open a tab for the session's domain.
+      const targetTab =
+        session.domain === this.state.currentDomain && this.state.currentTab.id != null
+          ? this.state.currentTab
+          : await this.chromeApi.findOrCreateTabForDomain(session.domain);
+
       const response = await this.chromeApi.sendMessage({
         action: MESSAGE_ACTIONS.SWITCH_SESSION,
         sessionData: session,
-        tabId: this.state.currentTab.id!,
+        tabId: targetTab.id!,
       });
 
       if (!response.success) {
         // Even if switching fails, update the active session in our state
-        this.state.activeSessions[this.state.currentDomain] = sessionId;
+        this.state.activeSessions[session.domain] = sessionId;
         session.lastUsed = Date.now();
         await this.saveStorageData();
         return;
       }
 
-      this.state.activeSessions[this.state.currentDomain] = sessionId;
+      this.state.activeSessions[session.domain] = sessionId;
       session.lastUsed = Date.now();
 
       await this.saveStorageData();
