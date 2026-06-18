@@ -237,7 +237,7 @@ class PopupController {
         const safeDomain = escapeHtml(entry.domain);
         const badge =
           entry.count > 0
-            ? `<span class="absolute -top-1 -right-1 bg-orange-500 text-white text-[10px] font-semibold rounded-full px-1.5 py-0.5">${entry.count}</span>`
+            ? `<span class="site-badge">${entry.count}</span>`
             : "";
         return `
         <article class="flex flex-col items-center space-y-1">
@@ -247,7 +247,7 @@ class PopupController {
             <img src="${this.faviconFor(entry.domain)}" alt="${safeDomain}" class="w-9 h-9 rounded" loading="lazy" decoding="async" />
             ${badge}
           </button>
-          <span class="text-[11px] text-gray-600 text-center truncate w-16" title="${safeDomain}">${safeDomain}</span>
+          <span class="text-[11px] text-gray-600 text-center truncate w-16" title="${safeDomain}">${safeDomain.length > 11 ? safeDomain.slice(0, 11) + ".." : safeDomain}</span>
         </article>`;
       })
       .join("");
@@ -271,7 +271,8 @@ class PopupController {
     const domain = this.selectedDomain;
     this.detailSiteIcon.src = this.faviconFor(domain);
     this.detailSiteIcon.alt = domain;
-    this.detailSiteName.textContent = domain;
+    this.detailSiteName.textContent = domain.length > 14 ? domain.slice(0, 14) + ".." : domain;
+    this.detailSiteName.title = domain;
     this.detailSiteTitle.textContent = domain;
 
     const state = this.popupService.getState();

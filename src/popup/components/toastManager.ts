@@ -29,8 +29,20 @@ export class ToastManager {
       clearTimeout(this.timer);
     }
 
-    // Update content
-    this.toastEl.textContent = message;
+    // Build icon name per type
+    const iconMap: Record<string, string> = {
+      success: "check_circle",
+      error: "error",
+      warning: "warning",
+      info: "info",
+    };
+
+    // Update content with icon + text
+    const icon = iconMap[type] ?? "info";
+    this.toastEl.innerHTML = `
+      <span class="toast__icon material-symbols-rounded" aria-hidden="true">${icon}</span>
+      <span class="toast__text">${message}</span>
+    `;
 
     // Set type class for styling
     this.toastEl.className = `toast toast--${type}`;
