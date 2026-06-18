@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,418 +8,249 @@
     <meta name="author" content="@ogisetiawan">
     <meta name="web_author" content="ogisetiawan.github.io">
     <title>Account Switcher - Chrome Extension</title>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" as="style">
-    <!-- <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style"> -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" as="style">
-    
-    <!-- Optimized CSS loading -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" media="print" onload="this.media='all'">
-    
-    <!-- Local Tailwind CSS instead of CDN for better performance -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
-    <style>
-        :root {
-            --primary-color: #F6843C;
-            --secondary-color: #fff7ed;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
-            --bg-primary: #F9FAFB;
-            --bg-secondary: #FFFFFF;
-            --border-color: #E5E7EB;
-            --shadow-light: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
+    <link rel="stylesheet" href="styles.css" />
+    <!-- <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> -->
 
-        body {
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-primary);
-            font-feature-settings: 'kern' 1, 'liga' 1;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+<body class="w-96 min-h-screen flex flex-col">
+    <main class="flex flex-col flex-grow bg-gray-50" role="main">
+        <!-- /?@ Main Page - Website Selection Grid -->
+        <div id="main-page" class="page">
+            <!--//?  Header Section -->
+            <header class="flex justify-between items-center p-4 pb-2" role="banner">
+                <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
+                    <img src="../assets/img/account-switcher.png" alt="Account Switcher Logo"
+                        class="w-6 h-6 flex-shrink-0" />
+                    <span>Account Switcher</span>
+                </h1>
 
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .site-button {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
-        }
-
-        .site-button:hover {
-            transform: translateY(-2px);
-        }
-
-        .site-button.active {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 8px 25px rgba(246, 143, 59, 0.3);
-        }
-
-        .session-item {
-            transition: all 0.15s ease-in-out;
-        }
-
-        .session-item.active {
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--primary-color);
-            transform: translateX(4px);
-        }
-
-        .pt-2 material-symbols-rounded {
-            font-variation-settings: 
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 24;
-        }
-
-        /* Focus styles for accessibility */
-        .focus-ring:focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* Loading state */
-        .loading::after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top: 2px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive improvements */
-        @media (max-width: 384px) {
-            .site-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
-</head>
-
-<body class="w-96 min-h-screen">
-    <main class="flex flex-col min-h-screen bg-gray-50" role="main">
-        
-        <!-- /?@ Header Section -->
-        <header class="flex justify-between items-center p-4 pb-2" role="banner">
-            <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
-                <img 
-                    src="../assets/img/account-switcher.png" 
-                    alt="Account Switcher Logo" 
-                    class="w-6 h-6 flex-shrink-0"
-                />
-                <span>Account Switcher</span>
-            </h1>
-            
-            <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
-                <button 
-                    type="button"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                    aria-label="Add new session"
-                    data-action="add-session"
-                >
-                    <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
-                </button>
-                
-                <button 
-                    type="button"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                    aria-label="Save current session"
-                    data-action="save-session"
-                >
-                    <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
-                </button>
-            </nav>
-        </header>
-
-        <!-- /?@ Search Section -->
-        <section class="px-4 mb-4" role="search">
-            <div class="relative">
-                <label for="website-search" class="sr-only">Search for websites</label>
-                <span class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true">
-                    search
-                </span>
-                <input 
-                    id="website-search"
-                    type="search"
-                    class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-                    placeholder="Find a website..."
-                    autocomplete="off"
-                    spellcheck="false"
-                    data-search="websites"
-                />
-            </div>
-        </section>
-
-        <!-- /?@ Website Selection Grid -->
-        <section class="px-4 mb-6" aria-labelledby="website-selection-heading">
-            <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
-            
-            <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
-                
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring active"
-                        aria-label="Switch to Google account"
-                        aria-pressed="true"
-                        data-site="google"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4Fr_j7xxpDjlUJODZQhdhMhpt0iBFaSeeWX5PbS5RvrMJOmWu6pnq_mJawxgQOdU57fqtE9_cE6sV8jTzbx6AERgUfmlKRDXghm8AN_MiqfRs-hGIK4eR3SA76VFz0C7DQPIXqP09RB0hIU41CWznWffiETw2LXo2kIqvnjiatdyJ95bSVcNL4FMSmUSZ-cjlZ1FJSuwwCumgK1umthEas1loAUBfU599emysE3-Qh2Wxcd5pACQoOGn63E8oBiLAeuyvwDOS-wu_" 
-                            alt="Google"
-                            class="w-10 h-10"
-                            loading="eager"
-                            decoding="async"
-                        />
+                <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
+                    <button type="button" id="addBtn" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        title="Add session" aria-label="Add new session" data-action="add-session">
+                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
                     </button>
-                </article>
 
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Facebook account"
-                        aria-pressed="false"
-                        data-site="facebook"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmumCPVjbe93NYeH4NQsKwAmPmxwUwTD7AtVSsbjcWA_N3s3mO5yegS9V_vF6-C0PI0ZrB50-NPWnhjY2jWi663OxbIqYPapKWOsIVGBe9xQfhTSiOefNhcZ4edwaoQPR--Z_0J-Lzg6TwwHo5OOZciEb2vs-LqgovZ7osPP2Uz3vIgKTMhr6hncvpNnIlsl7L0wuVvX-8o_9IjXlqAaR_QPJXtpbU2Ek_Z-kT_IiExaFjjda3vkNFr06AQbVe9GFA_m4NZRjSN_fr" 
-                            alt="Facebook"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        title="Save session" aria-label="Save current session" data-action="save-session">
+                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
                     </button>
-                </article>
+                </nav>
+            </header>
 
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to GitHub account"
-                        aria-pressed="false"
-                        data-site="github"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEq0rSIfUhoRwRESiTgGaF5Ph42dHN5h7XOVIrAt4UZnkHOGcQWVRlziGFLHdPWoQEnBGbANNP2TelXUSrDlyxK9-z20RWmrnSzWNxzOlHPi0WsBqGWm5cfrbhNPHnAmKkpbLZWnVEaLTYqBMBbzGcn6rDPIRo2SCMIyCv7ZT34jiFggZSOkWSuSEDmEt_bP8z2R7e6-ckyrEVrWlI6LHs5CNcuOw7XGBINpNWV3MVlhhRYwQTZb6ta9F2QaZ9XeC1dSHlxqju8tes" 
-                            alt="GitHub"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
-
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Twitter account"  
-                        aria-pressed="false"
-                        data-site="twitter"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9IiMOTFozXrCUeHdd97c8Echlnnc2du0LpM4jD7ssk1DninXsEM6J5jE_wEc0qyn85fWlN9gxDrJQC9tgSsAmBtItAleW9Bc6lJxX4wJeKTXxET-sBsB_iLzs-_Ydlrk1SbmxtBB54ptmgB5Mf9mrw2lO3dkUqyOngYEq_nl-pifmr0cUp_YqpflXuuLsFooXBcTSnRPl1XIAvSgWVGLLL6LGTtAOzIENL-RUDg4gvQoeH1tINXldzze8mKjsg67PRnwVaIOZb0U1" 
-                            alt="Twitter"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
-
-                <article class="flex justify-center">
-                    <button 
-                        type="button"
-                        class="site-button w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring"
-                        aria-label="Switch to Slack account"
-                        aria-pressed="false"
-                        data-site="slack"
-                    >
-                        <img 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGlj7TB88lysP5h1jHSuIJkhePslQDHvG2cIBpPCjoosFs8JvwRYILJimH-fFwq20H7dal_8NNoBjthMdbRoYsWLoMDhvJzczhWyWKUoABILYWw9Aa8iKZoALrKfMrpgX2sVRjfJTGcO6bRUcrQ8Xn8vYHW-fi6nI1CM8CDj4S_dcgRkgYQJWnlhE07kAOB6W8IDYsIL8WNvf5SJA_PbQNUO0DgevgRGTzz4gXhsNvY20gjt24qaU0Tuqgb2R3Dwuez_jCH-vvNpiY" 
-                            alt="Slack"
-                            class="w-10 h-10"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </button>
-                </article>
-            </div>
-        </section>
-
-        <!-- /?@ Sessions List -->
-        <section class="flex-grow px-4 pb-20" aria-labelledby="sessions-heading">
-            <div class="glassmorphism p-4">
-                <header class="flex flex-col items-left mb-4">
-                    <h2 id="sessions-heading" class="text-lg font-semibold text-gray-800">
-                        Saved Sessions for Google
-                    </h2>
-                    <div class="text-sm text-gray-500" aria-live="polite">
-                        <span id="session-count">2 sessions</span>
-                    </div>
-                </header>
-
-                <div role="group" aria-labelledby="sessions-heading">
-                    <ul class="space-y-3" role="list">
-                        
-                        <li role="listitem">
-                            <article class="session-item active flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-orange-50">
-                                <div class="flex items-center flex-1 min-w-0">
-                                    <img 
-                                        src="../assets/img/account.png"
-                                        alt="Profile picture for personal@email.com"
-                                        class="w-10 h-10 rounded-full mr-4"
-                                        loading="lazy"
-                                        decoding="async"
-                                    />
-                                    
-                                    <div class="min-w-0">
-                                        <h3 class="font-medium text-gray-800 truncate">
-                                            personal@email.com
-                                        </h3>
-                                        <p class="text-sm text-gray-500">
-                                            <time datetime="2025-09-06T12:22:00">Last used: 2 hours ago</time>
-                                            <span class="ml-0 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800">
-                                                Active
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <nav class="flex items-center space-x-1 ml-2" aria-label="Session actions">
-                                    <button 
-                                        type="button"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        aria-label="Edit personal@email.com session"
-                                        data-action="edit-session"
-                                        data-email="personal@email.com"
-                                    >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
-                                    </button>
-                                    
-                                    <button 
-                                        type="button"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        aria-label="Delete personal@email.com session"
-                                        data-action="delete-session"
-                                        data-email="personal@email.com"
-                                    >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
-                                    </button>
-                                </nav>
-                            </article>
-                        </li>
-
-                        <li role="listitem">
-                            <article class="session-item flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-gray-100">
-                                
-                                <div class="flex items-center flex-1 min-w-0">
-                                    <img 
-                                        src="../assets/img/account.png" 
-                                        alt="Profile picture for work@company.com"
-                                        class="w-10 h-10 rounded-full mr-4"
-                                        loading="lazy"
-                                        decoding="async"
-                                    />
-                                    
-                                    <div class="min-w-0">
-                                        <h3 class="font-medium text-gray-800 truncate">
-                                            work@company.com
-                                        </h3>
-                                        <p class="text-sm text-gray-500">
-                                            <time datetime="2025-09-05T14:22:00">Last used: 1 day ago</time>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <nav class="flex items-center space-x-1 ml-2" aria-label="Session actions">
-                                    <button 
-                                        type="button"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        aria-label="Edit work@company.com session"
-                                        data-action="edit-session"
-                                        data-email="work@company.com"
-                                    >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">edit</span>
-                                    </button>
-                                    
-                                    <button 
-                                        type="button"
-                                        class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                                        aria-label="Delete work@company.com session"
-                                        data-action="delete-session"
-                                        data-email="work@company.com"
-                                    >
-                                        <span class="pt-2 material-symbols-rounded text-gray-600 " aria-hidden="true">delete</span>
-                                    </button>
-                                </nav>
-                            </article>
-                        </li>
-                    </ul>
+            <!--//? Search Section -->
+            <section class="px-4 mb-4" role="search">
+                <div class="relative">
+                    <label for="website-search" class="sr-only">Search for websites</label>
+                    <span
+                        class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                        aria-hidden="true">
+                        search
+                    </span>
+                    <input id="website-search" type="search"
+                        class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all text-base"
+                        placeholder="Find a website..." autocomplete="off" spellcheck="false" data-search="websites" />
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <!--//? Website Selection Grid -->
+            <section class="px-4 mb-6 " aria-labelledby="website-selection-heading">
+                <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
+
+                <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
+
+                </div>
+            </section>
+        </div>
+
+        <!-- /?@ Halaman Detail - Session List -->
+        <div id="detail-page" class="page hidden">
+            <!--//? Header with back button -->
+            <header class="flex items-center p-4 pb-2 detail-header" role="banner">
+                <button type="button"
+                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring mr-2 back-button"
+                    title="Back" aria-label="Back to main page" data-action="back-to-main">
+                    <span class="material-symbols-rounded text-gray-600 pt-2" aria-hidden="true">arrow_back</span>
+                </button>
+
+                <div class="flex items-center space-x-2 flex-1">
+                    <img id="detail-site-icon" src="" alt="" class="w-6 h-6 flex-shrink-0" />
+                    <h1 id="detail-site-name" class="text-xl font-bold text-gray-800">Sessions</h1>
+                </div>
+
+                <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        title="Add session" aria-label="Add new session" data-action="add-session">
+                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
+                    </button>
+
+                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                        title="Save session" aria-label="Save current session" data-action="save-session">
+                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
+                    </button>
+                </nav>
+            </header>
+
+            <!--//? Sessions List -->
+            <section class="flex-grow px-4 pb-20 mt-4" aria-labelledby="sessions-heading">
+                <div class="glassmorphism p-4">
+                    <header class="flex flex-col items-left mb-4">
+                        <h2 id="sessions-heading" class="text-lg font-semibold text-gray-800">
+                            Saved Sessions for <span id="detail-site-title">Google</span>
+                        </h2>
+                        <div class="text-sm text-gray-500" aria-live="polite">
+                            <span id="session-count">0 sessions</span>
+                        </div>
+                    </header>
+
+                    <!--//?  Sessions List Container -->
+                    <div class="scrollable-sessions" role="group" aria-labelledby="sessions-heading">
+                        <ul id="sessions-list" class="space-y-3" role="list">
+                            <!--//? Sessions will be rendered dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <!-- /?@ Footer -->
-    <footer class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] h-12 flex items-center justify-between px-4 z-10" role="contentinfo">
-        <!-- Left side: Help dan Settings icons -->
-        <div class="flex items-center space-x-0 pt-2">
-            <button 
-                type="button"
-                class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Help center"
-                data-action="show-help"
-            >
+    <footer
+        class="w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] flex items-center justify-between px-4 py-2 mt-auto z-10"
+        role="contentinfo">
+        <!-- //? Left side: Help dan Settings icons -->
+        <div class="flex items-center space-x-0">
+            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                title="Help" aria-label="Help center" data-action="show-help">
                 <span class="material-symbols-rounded text-gray-600" aria-hidden="true">help_center</span>
             </button>
-    
-            <button 
-                type="button"
-                class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                aria-label="Settings"
-                data-action="show-settings"
-            >
+
+            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+                title="Settings" aria-label="Settings" data-action="show-settings">
                 <span class="material-symbols-rounded text-gray-600" aria-hidden="true">settings</span>
             </button>
         </div>
-        
-        <!-- Right side: Copyright text -->
-        <p class="text-sm text-gray-500">
-            <span class="ml-0">© 2025 |</span>
-            <a class="text-orange-500 hover:text-orange-700 transition-colors font-semibold" href="https://ogisetiawan.github.io" target="_blank" rel="noopener">qnr.dev</a>
+
+        <!-- //? Right side: Copyright text -->
+        <p class="text-sm text-gray-500 flex items-center space-x-2">
+            <span>© 2025 |</span>
+            <img src="../assets/img/logo-mini-qnr.svg" alt="QNR Logo" class="w-3 h-3 flex-shrink-0 mt-1" />
+            <a class="text-orange-500 hover:text-orange-700 transition-colors font-semibold"
+                href="https://ogisetiawan.github.io" target="_blank" rel="noopener">
+                qnr.dev
+            </a>
         </p>
+
     </footer>
-    
+
 
     <!--//@ Loading overlay for better UX -->
-    <div id="loading-overlay" class="hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div id="loading-overlay"
+        class="hidden fixed inset-0 modal-blur-background z-50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 shadow-xl flex items-center space-x-3">
             <div class="loading"></div>
             <span class="text-gray-700">Switching session...</span>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="./extension.js" defer></script>
+    <!-- //@ Save Session Modal -->
+    <div id="saveModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Save Session</h3>
+                <button id="closeSaveModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="mb-4">
+                    <label for="websiteUrl" class="block text-sm font-medium text-gray-700 mb-2">Website Address</label>
+                    <input type="url" id="websiteUrl" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="https://example.com">
+                    <div id="websiteUrlError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+                </div>
+                <div class="mb-6">
+                    <label for="sessionName" class="block text-sm font-medium text-gray-700 mb-2">Session Name</label>
+                    <input type="text" id="sessionName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="My Session">
+                    <div id="sessionNameError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+                </div>
+            </div>
+            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
+                <button id="cancelSaveModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="saveSaveModal" title="Save session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
+                    <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- //@ Rename Session Modal -->
+    <div id="renameModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Rename Session</h3>
+                <button id="closeRenameModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="mb-2">
+                    <label for="renameSessionName" class="block text-sm font-medium text-gray-700 mb-2">Session Name</label>
+                    <input type="text" id="renameSessionName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="My Session">
+                    <div id="renameNameError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+                </div>
+            </div>
+            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
+                <button id="cancelRenameModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="confirmRenameModal" title="Rename session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
+                    <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
+                    <span>Rename</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- //@ Delete Session Modal -->
+    <div id="deleteModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Delete Session</h3>
+                <button id="closeDeleteModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600">
+                    Are you sure you want to delete
+                    <span id="deleteSessionName" class="font-semibold text-gray-900"></span>? This action cannot be undone.
+                </p>
+            </div>
+            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
+                <button id="cancelDeleteModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="confirmDeleteModal" title="Delete session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
+                    <span class="material-symbols-rounded text-lg" aria-hidden="true">delete</span>
+                    <span>Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- //@ Toast notification -->
+    <div id="toast" role="status" aria-live="polite">
+    </div>
+
+    <!--//@ Scripts -->
+    <script src="./index.js" defer></script>
 </body>
+
 </html>

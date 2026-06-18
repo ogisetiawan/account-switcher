@@ -1,4 +1,5 @@
 import { MessageResponse, MessageType } from "@shared/types";
+import { getDomainFromUrl } from "@shared/utils/domain";
 
 export class ChromeApiService {
   private readonly MESSAGE_TIMEOUT = 10000; // 10 seconds timeout
@@ -36,6 +37,53 @@ export class ChromeApiService {
       console.error("Error getting current tab:", error);
       throw new Error("Failed to get current tab");
     }
+  }
+
+  async findOrCreateTabForDomain(domain: string): Promise<chrome.tabs.Tab> {
+    if (!this.isExtensionEnvironment) {
+      return this.getCurrentTab();
+    }
+
+    try {
+      const tabs = await chrome.tabs.query({});
+      const match = tabs.find((tab) => tab.url && getDomainFromUrl(tab.url) === domain);
+
+      if (match?.id != null) {
+        await chrome.tabs.update(match.id, { active: true });
+        if (match.windowId != null) {
+          await chrome.windows.update(match.windowId, { focused: true });
+        }
+        return match;
+      }
+
+      const created = await chrome.tabs.create({ url: `https://${domain}`, active: true });
+      if (created.id == null) {
+        return created;
+      }
+      return await this.waitForTabComplete(created.id);
+    } catch (error) {
+      console.error("Error resolving tab for domain:", error);
+      throw new Error("Failed to open a tab for the session domain");
+    }
+  }
+
+  private waitForTabComplete(tabId: number, timeoutMs = 15000): Promise<chrome.tabs.Tab> {
+    return new Promise((resolve, reject) => {
+      const finish = (handler: () => Promise<chrome.tabs.Tab>) => {
+        chrome.tabs.onUpdated.removeListener(listener);
+        clearTimeout(timer);
+        handler().then(resolve).catch(reject);
+      };
+
+      const listener = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+        if (updatedTabId === tabId && changeInfo.status === "complete") {
+          finish(() => chrome.tabs.get(tabId));
+        }
+      };
+
+      const timer = setTimeout(() => finish(() => chrome.tabs.get(tabId)), timeoutMs);
+      chrome.tabs.onUpdated.addListener(listener);
+    });
   }
 
   async sendMessage<T>(message: MessageType): Promise<MessageResponse<T>> {
