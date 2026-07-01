@@ -19,6 +19,7 @@ class PopupController {
   private selectedDomain = "";
   private renameSessionId = "";
   private deleteSessionId = "";
+  private deleteTargetDomain = "";
   private searchQuery = "";
 
   private mainPage = getElementByIdSafe("main-page");
@@ -45,7 +46,6 @@ class PopupController {
   private renameError = getElementByIdSafe("renameNameError");
 
   private deleteModal = getElementByIdSafe("deleteModal");
-  private deleteSessionName = getElementByIdSafe("deleteSessionName");
 
   private toastManager: ToastManager;
 
@@ -138,6 +138,13 @@ class PopupController {
     getElementByIdSafe("cancelDeleteModal").addEventListener("click", () => this.hide(this.deleteModal));
     getElementByIdSafe("confirmDeleteModal").addEventListener("click", () => this.handleConfirmDelete());
 
+    // When modal closes, reset domain target
+    this.deleteModal.addEventListener("transitionend", () => {
+      if (this.deleteModal.classList.contains("hidden")) {
+        this.deleteTargetDomain = "";
+      }
+    });
+
     [this.saveModal, this.renameModal, this.deleteModal].forEach((modal) => {
       modal.addEventListener("click", (e) => {
         if (e.target === modal) this.hide(modal);
@@ -175,6 +182,9 @@ class PopupController {
           return;
         case "delete-session":
           if (sessionId) this.openDeleteModal(sessionId);
+          return;
+        case "delete-domain":
+          this.handleDeleteDomain(actionEl.dataset.site ?? "");
           return;
         case "show-help":
         case "show-settings":
@@ -240,14 +250,19 @@ class PopupController {
             ? `<span class="site-badge">${entry.count}</span>`
             : "";
         return `
-        <article class="flex flex-col items-center space-y-1">
+        <article class="flex flex-col items-center space-y-1 group">
           <button type="button"
             class="site-button relative w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring ${isCurrent ? "active" : ""}"
             title="${safeDomain}" aria-label="View sessions for ${safeDomain}" data-site="${safeDomain}">
             <img src="${this.faviconFor(entry.domain)}" alt="${safeDomain}" class="w-9 h-9 rounded" loading="lazy" decoding="async" />
             ${badge}
           </button>
-          <span class="text-[11px] text-gray-600 text-center truncate w-16" title="${safeDomain}">${safeDomain.length > 11 ? safeDomain.slice(0, 11) + ".." : safeDomain}</span>
+          <div class="flex items-center justify-center w-16 mt-1 relative">
+            <span class="text-[11px] text-gray-600 text-center truncate font-medium" title="${safeDomain}">${safeDomain.length > 11 ? safeDomain.slice(0, 11) + ".." : safeDomain}</span>
+            <span class="site-delete-icon" data-action="delete-domain" data-site="${safeDomain}" title="Delete all sessions for ${safeDomain}">
+              <span class="material-symbols-rounded text-gray-600" aria-hidden="true">delete</span>
+            </span>
+          </div>
         </article>`;
       })
       .join("");
@@ -435,13 +450,56 @@ class PopupController {
     }
 
     this.deleteSessionId = sessionId;
-    this.deleteSessionName.textContent = session.name;
+    this.deleteTargetDomain = "";
+    const modalTitle = getElementByIdSafe("deleteModalTitle");
+    const modalMessage = getElementByIdSafe("deleteModalMessage");
+    const confirmBtn = getElementByIdSafe("confirmDeleteModal");
+
+    modalTitle.textContent = "Delete Session";
+    modalMessage.innerHTML =
+      `Are you sure you want to delete session <span class="font-semibold text-gray-900">${escapeHtml(session.name)}</span>? This action cannot be undone.`;
+    confirmBtn.querySelector("span:last-child")!.textContent = "Delete";
+    this.show(this.deleteModal);
+  }
+
+  private async handleDeleteDomain(domain: string): Promise<void> {
+    if (!this.requireExtension()) return;
+    if (!domain) return;
+
+    this.deleteTargetDomain = domain;
+    const modalTitle = getElementByIdSafe("deleteModalTitle");
+    const modalMessage = getElementByIdSafe("deleteModalMessage");
+    const confirmBtn = getElementByIdSafe("confirmDeleteModal");
+
+    modalTitle.textContent = "Delete Website";
+    modalMessage.innerHTML =
+      `Are you sure you want to delete <span class="font-semibold text-gray-900">${escapeHtml(domain)}</span> and all <span class="font-semibold text-gray-900">${this.popupService.getState().sessions.filter((s) => s.domain === domain).length} session(s)</span>? This action cannot be undone.`;
+    confirmBtn.querySelector("span:last-child")!.textContent = "Delete Website";
     this.show(this.deleteModal);
   }
 
   private async handleConfirmDelete(): Promise<void> {
     if (!this.requireExtension()) return;
 
+    // If a domain is targeted, delete by domain
+    if (this.deleteTargetDomain) {
+      const domain = this.deleteTargetDomain;
+      this.deleteTargetDomain = "";
+      try {
+        await this.withLoading("Deleting sessions...", async () => {
+          await this.popupService.deleteSessionsByDomain(domain);
+        });
+        this.hide(this.deleteModal);
+        this.refreshAfterChange();
+        this.showToast(`All sessions for ${domain} deleted`);
+      } catch (error) {
+        console.error("Delete domain error:", error);
+        this.showToast(handleError(error, "delete domain"));
+      }
+      return;
+    }
+
+    // Otherwise delete a single session
     try {
       await this.popupService.deleteSession(this.deleteSessionId);
       this.hide(this.deleteModal);

@@ -197,6 +197,19 @@ export class PopupService {
     }
   }
 
+  async deleteSessionsByDomain(domain: string): Promise<void> {
+    try {
+      console.log("Deleting all sessions for domain:", domain);
+      this.state.sessions = this.state.sessions.filter((s) => s.domain !== domain);
+      delete this.state.activeSessions[domain];
+      await this.saveStorageData();
+      console.log("Domain sessions deleted successfully");
+    } catch (error) {
+      console.error("Delete domain error:", error);
+      throw new ExtensionError(handleError(error, "PopupService.deleteSessionsByDomain"));
+    }
+  }
+
   getSession(sessionId: string): SessionData | undefined {
     return this.state.sessions.find((s) => s.id === sessionId);
   }

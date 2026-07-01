@@ -73,6 +73,31 @@ body {
     box-shadow: 0 8px 25px rgba(246, 143, 59, 0.3);
 }
 
+/* Hover-reveal delete icon beside domain name */
+.site-delete-icon {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    cursor: pointer;
+    line-height: 1;
+    margin-left: 2px;
+    flex-shrink: 0;
+}
+
+.site-delete-icon .material-symbols-rounded {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.site-delete-icon:hover .material-symbols-rounded {
+    color: #ef4444;
+}
+
+.group:hover .site-delete-icon {
+    opacity: 1;
+}
+
 .session-item {
     transition: all 0.15s ease-in-out;
 }
