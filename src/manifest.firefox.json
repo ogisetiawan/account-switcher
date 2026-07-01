@@ -3,14 +3,11 @@
   "name": "Account Switcher",
   "version": "2.0.1",
   "description": "Switch and clear browser sessions tools",
-
-  "permissions": ["storage", "tabs", "cookies", "activeTab", "scripting"],
-  "host_permissions": ["<all_urls>", "http://*/*", "https://*/*"],
-
+  "permissions": ["storage", "tabs", "cookies", "scripting", "activeTab", "windows"],
+  "host_permissions": ["<all_urls>"],
   "background": {
-    "scripts": ["background/index.js"]
+    "service_worker": "background/index.js"
   },
-
   "action": {
     "default_popup": "popup/index.html",
     "default_title": "Account Switcher",
@@ -21,15 +18,13 @@
       "128": "assets/icons/icon-128.png"
     }
   },
-
   "icons": {
     "16": "assets/icons/icon-16.png",
     "32": "assets/icons/icon-32.png",
     "48": "assets/icons/icon-48.png",
     "128": "assets/icons/icon-128.png"
   },
-
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;"
   }
 }

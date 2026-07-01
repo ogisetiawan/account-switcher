@@ -53,10 +53,6 @@ class PopupController {
     this.isExtensionEnvironment =
       typeof chrome !== "undefined" && typeof chrome.runtime !== "undefined" && typeof chrome.tabs !== "undefined";
 
-    if (!this.isExtensionEnvironment) {
-      console.warn("Running in non-extension environment - some features may not work");
-    }
-
     this.toastManager = new ToastManager();
     this.setupEventListeners();
   }
@@ -581,8 +577,6 @@ class PopupController {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("Account Switcher popup loaded");
-
   try {
     const controller = new PopupController();
     await controller.initialize();
@@ -611,8 +605,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       window.addEventListener("beforeunload", cleanup);
       window.addEventListener("unload", cleanup);
-    } else {
-      console.log("Running in non-extension environment - Chrome listeners not setup");
     }
   } catch (error) {
     console.error("Failed to setup popup:", error);
