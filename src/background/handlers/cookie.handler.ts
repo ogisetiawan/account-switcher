@@ -1,8 +1,6 @@
 export class CookieHandler {
   async getCookiesForDomain(domain: string): Promise<chrome.cookies.Cookie[]> {
     try {
-      console.log("Getting cookies for domain:", domain);
-
       const stores = await chrome.cookies.getAllCookieStores();
       const allCookies: chrome.cookies.Cookie[] = [];
       const currentDomain = domain.split(":")[0];
@@ -21,11 +19,9 @@ export class CookieHandler {
           allCookies.push(...domainCookies);
         } catch (storeError) {
           console.warn("Failed to get cookies from store:", store.id, storeError);
-          // Continue with other stores
         }
       }
 
-      console.log("Cookies retrieved successfully:", allCookies.length);
       return allCookies;
     } catch (error) {
       console.error("Error getting cookies for domain:", domain, error);
@@ -35,11 +31,8 @@ export class CookieHandler {
 
   async clearCookiesForDomain(domain: string): Promise<void> {
     try {
-      console.log("Clearing cookies for domain:", domain);
-
       const cookies = await this.getCookiesForDomain(domain);
       if (cookies.length === 0) {
-        console.log("No cookies to clear");
         return;
       }
 
@@ -56,19 +49,14 @@ export class CookieHandler {
       });
 
       await Promise.all(clearPromises);
-      console.log("Cookies cleared successfully");
     } catch (error) {
       console.error("Error clearing cookies for domain:", domain, error);
-      // Don't throw error, just log it
     }
   }
 
   async restoreCookies(cookies: chrome.cookies.Cookie[], domain: string): Promise<void> {
     try {
-      console.log("Restoring cookies for domain:", domain, "count:", cookies.length);
-
       if (cookies.length === 0) {
-        console.log("No cookies to restore");
         return;
       }
 
@@ -82,10 +70,8 @@ export class CookieHandler {
       });
 
       await Promise.all(restorePromises);
-      console.log("Cookies restored successfully");
     } catch (error) {
       console.error("Error restoring cookies for domain:", domain, error);
-      // Don't throw error, just log it
     }
   }
 
@@ -110,7 +96,6 @@ export class CookieHandler {
       return `${protocol}://${domain}${path}`;
     } catch (error) {
       console.error("Error building cookie URL:", error);
-      // Return a fallback URL
       return `http://${fallbackDomain || "localhost"}/`;
     }
   }
@@ -144,7 +129,6 @@ export class CookieHandler {
       return cookieDetails;
     } catch (error) {
       console.error("Error preparing cookie for restore:", error);
-      // Return a basic cookie details object
       return {
         url: `http://${fallbackDomain}/`,
         name: cookie.name,

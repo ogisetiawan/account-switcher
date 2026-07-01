@@ -37,16 +37,16 @@ export class MessageService {
       const hasStorage = permissions.permissions.includes("storage");
       const hasTabs = permissions.permissions.includes("tabs");
       const hasCookies = permissions.permissions.includes("cookies");
+      const hasScripting = permissions.permissions.includes("scripting");
 
-      if (!hasStorage || !hasTabs || !hasCookies) {
-        throw new Error("Storage, tabs, and cookies permissions are required");
+      if (!hasStorage || !hasTabs || !hasCookies || !hasScripting) {
+        throw new Error("Storage, tabs, cookies, and scripting permissions are required");
       }
 
       // For Firefox, be more flexible with origin permissions
       const origins = permissions.origins || [];
       if (origins.length === 0) {
         // Try to continue anyway, as some Firefox versions might not report origins correctly
-        console.warn("No origin permissions found, but continuing...");
       }
     } catch (error) {
       console.error("Permission check error:", error);
@@ -55,9 +55,7 @@ export class MessageService {
     }
   }
 
-  //? first run proccess extension
   private async processMessage(message: MessageType, sendResponse: SendResponseType): Promise<void> {
-    console.log("#test, apakah ini init?");
     try {
       switch (message.action) {
         case MESSAGE_ACTIONS.GET_CURRENT_SESSION:

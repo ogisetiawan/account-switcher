@@ -68,14 +68,6 @@ export function clearStorage(): void {
     if (typeof sessionStorage !== "undefined") {
       sessionStorage.clear();
     }
-
-    // Clear IndexedDB (basic approach)
-    if (typeof indexedDB !== "undefined") {
-      // This is a simplified approach - full IndexedDB clearing is more complex
-      console.log("IndexedDB clearing would require more specific implementation");
-    }
-
-    console.log("Client-side storage cleared");
   } catch (error) {
     console.error("Error clearing client storage:", error);
   }

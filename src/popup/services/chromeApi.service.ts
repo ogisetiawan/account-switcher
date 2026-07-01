@@ -9,10 +9,6 @@ export class ChromeApiService {
     // Check if we're running in an extension environment
     this.isExtensionEnvironment =
       typeof chrome !== "undefined" && typeof chrome.runtime !== "undefined" && typeof chrome.tabs !== "undefined";
-
-    if (!this.isExtensionEnvironment) {
-      console.warn("Chrome APIs not available - running in non-extension environment");
-    }
   }
 
   async getCurrentTab(): Promise<chrome.tabs.Tab> {
@@ -88,8 +84,6 @@ export class ChromeApiService {
 
   async sendMessage<T>(message: MessageType): Promise<MessageResponse<T>> {
     if (!this.isExtensionEnvironment) {
-      // Return mock response for non-extension environment
-      console.warn("Chrome runtime not available - returning mock response");
       return {
         success: true,
         data: null as T,
@@ -131,8 +125,6 @@ export class ChromeApiService {
   async getStorageData<T>(keys: (keyof T)[]): Promise<T> {
     try {
       if (!this.isExtensionEnvironment) {
-        // Return mock storage data for non-extension environment
-        console.warn("Chrome storage not available - returning mock data");
         return {} as T;
       }
 
@@ -147,8 +139,6 @@ export class ChromeApiService {
   async setStorageData(data: Record<string, unknown>): Promise<void> {
     try {
       if (!this.isExtensionEnvironment) {
-        // Mock storage operation for non-extension environment
-        console.warn("Chrome storage not available - mocking storage operation");
         return;
       }
 

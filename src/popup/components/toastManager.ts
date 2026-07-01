@@ -21,7 +21,7 @@ export class ToastManager {
   }
 
   show(options: string | ToastOptions): void {
-    const { message, type = "info", duration = 3200 } =
+    const { message, type = "warning", duration = 3200 } =
       typeof options === "string" ? { message: options } : options;
 
     // Clear any existing timer

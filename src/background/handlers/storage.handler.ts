@@ -44,7 +44,6 @@ export class StorageHandler {
 
       // Skip for chrome:// or extension:// URLs
       if (tab.url.startsWith("chrome://") || tab.url.startsWith("chrome-extension://")) {
-        console.log("Skipping storage clear for system URL:", tab.url);
         return;
       }
 
@@ -52,8 +51,6 @@ export class StorageHandler {
         target: { tabId },
         func: clearStorage,
       });
-
-      console.log("Storage cleared successfully for tab:", tabId);
     } catch (error) {
       console.error("Storage clear error:", error);
       throw new ExtensionError(`Failed to clear storage data: ${error}`);
