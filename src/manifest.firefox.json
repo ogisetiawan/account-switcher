@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Account Switcher",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Switch and Manage multiple website sessions easily",
   "permissions": ["storage", "tabs", "cookies", "scripting", "activeTab", "windows"],
   "host_permissions": ["<all_urls>"],

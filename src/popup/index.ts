@@ -13,6 +13,8 @@ interface DomainEntry {
 }
 
 class PopupController {
+  private static readonly FAVICON_FALLBACK = "../assets/img/account-switcher.png";
+
   private popupService = new PopupService();
   private isExtensionEnvironment = false;
   private initialized = false;
@@ -34,7 +36,7 @@ class PopupController {
   private sessionsList = getElementByIdSafe("sessions-list");
 
   private loadingOverlay = getElementByIdSafe("loading-overlay");
-  private loadingText = querySelector<HTMLElement>("#loading-overlay span");
+  private loadingText = querySelector<HTMLElement>(".overlay__text");
 
   private saveModal = getElementByIdSafe("saveModal");
   private websiteUrlInput = getElementByIdSafe<HTMLInputElement>("websiteUrl");
@@ -246,22 +248,27 @@ class PopupController {
             ? `<span class="site-badge">${entry.count}</span>`
             : "";
         return `
-        <article class="flex flex-col items-center space-y-1 group">
+        <article class="site-tile">
           <button type="button"
-            class="site-button relative w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center focus-ring ${isCurrent ? "active" : ""}"
+            class="site-button focus-ring ${isCurrent ? "active" : ""}"
             title="${safeDomain}" aria-label="View sessions for ${safeDomain}" data-site="${safeDomain}">
-            <img src="${this.faviconFor(entry.domain)}" alt="${safeDomain}" class="w-9 h-9 rounded" loading="lazy" decoding="async" />
+            <img alt="${safeDomain}" loading="lazy" decoding="async" />
             ${badge}
           </button>
-          <div class="flex items-center justify-center w-16 mt-1 relative">
-            <span class="text-[11px] text-gray-600 text-center truncate font-medium" title="${safeDomain}">${safeDomain.length > 11 ? safeDomain.slice(0, 11) + ".." : safeDomain}</span>
+          <div class="site-tile__label-row">
+            <span class="site-tile__label" title="${safeDomain}">${safeDomain.length > 11 ? safeDomain.slice(0, 11) + ".." : safeDomain}</span>
             <span class="site-delete-icon" data-action="delete-domain" data-site="${safeDomain}" title="Delete all sessions for ${safeDomain}">
-              <span class="material-symbols-rounded text-gray-600" aria-hidden="true">delete</span>
+              <span class="material-symbols-rounded" aria-hidden="true">delete</span>
             </span>
           </div>
         </article>`;
       })
       .join("");
+
+    this.siteGrid.querySelectorAll<HTMLImageElement>(".site-button img").forEach((img) => {
+      const site = img.closest<HTMLElement>("[data-site]")?.dataset.site;
+      if (site) this.bindFavicon(img, site);
+    });
   }
 
   private renderEmptyState(message: string): string {
@@ -280,7 +287,7 @@ class PopupController {
 
   private renderDetail(): void {
     const domain = this.selectedDomain;
-    this.detailSiteIcon.src = this.faviconFor(domain);
+    this.bindFavicon(this.detailSiteIcon, domain);
     this.detailSiteIcon.alt = domain;
     this.detailSiteName.textContent = domain.length > 14 ? domain.slice(0, 14) + ".." : domain;
     this.detailSiteName.title = domain;
@@ -294,8 +301,8 @@ class PopupController {
 
     if (sessions.length === 0) {
       this.sessionsList.innerHTML = `
-        <li class="text-center py-8 text-gray-500">
-          <span class="material-symbols-rounded text-4xl mb-2 block">account_circle</span>
+        <li class="session-empty">
+          <span class="material-symbols-rounded" aria-hidden="true">account_circle</span>
           <p>No saved sessions for this website</p>
         </li>`;
       return;
@@ -309,26 +316,26 @@ class PopupController {
     const safeName = escapeHtml(session.name);
     return `
       <li role="listitem">
-        <article class="session-item ${isActive ? "active" : ""} flex items-center justify-between bg-white/50 p-3 rounded-lg shadow-sm cursor-pointer transition-colors hover:bg-orange-50"
+        <article class="session-item ${isActive ? "active" : ""}"
           title="Switch to this account" data-action="switch-session" data-session-id="${session.id}">
-          <div class="flex items-center flex-1 min-w-0">
-            <span class="material-symbols-rounded text-gray-400 mr-3" aria-hidden="true">account_circle</span>
-            <div class="min-w-0">
-              <h3 class="font-medium text-gray-800 truncate">${safeName}</h3>
-              <p class="text-sm text-gray-500">
+          <div class="session-item__body">
+            <span class="material-symbols-rounded session-item__icon" aria-hidden="true">account_circle</span>
+            <div class="session-item__info">
+              <h3 class="session-item__name">${safeName}</h3>
+              <p class="session-item__meta">
                 <time datetime="${new Date(session.lastUsed).toISOString()}">Last used: ${this.formatLastUsed(session.lastUsed)}</time>
-                ${isActive ? "<span class=\"inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-300 text-orange-800\">Active</span>" : ""}
+                ${isActive ? "<span class=\"session-item__badge\">Active</span>" : ""}
               </p>
             </div>
           </div>
-          <nav class="flex items-center space-x-1 ml-2" aria-label="Session actions">
-            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+          <nav class="session-item__actions" aria-label="Session actions">
+            <button type="button" class="icon-btn"
               title="Rename" aria-label="Rename ${safeName}" data-action="edit-session" data-session-id="${session.id}">
-              <span class="material-symbols-rounded text-gray-600" aria-hidden="true">edit</span>
+              <span class="material-symbols-rounded" aria-hidden="true">edit</span>
             </button>
-            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
+            <button type="button" class="icon-btn"
               title="Delete" aria-label="Delete ${safeName}" data-action="delete-session" data-session-id="${session.id}">
-              <span class="material-symbols-rounded text-gray-600" aria-hidden="true">delete</span>
+              <span class="material-symbols-rounded" aria-hidden="true">delete</span>
             </button>
           </nav>
         </article>
@@ -453,7 +460,7 @@ class PopupController {
 
     modalTitle.textContent = "Delete Session";
     modalMessage.innerHTML =
-      `Are you sure you want to delete session <span class="font-semibold text-gray-900">${escapeHtml(session.name)}</span>? This action cannot be undone.`;
+      `Are you sure you want to delete session <span class="text-emphasis">${escapeHtml(session.name)}</span>? This action cannot be undone.`;
     confirmBtn.querySelector("span:last-child")!.textContent = "Delete";
     this.show(this.deleteModal);
   }
@@ -469,7 +476,7 @@ class PopupController {
 
     modalTitle.textContent = "Delete Website";
     modalMessage.innerHTML =
-      `Are you sure you want to delete <span class="font-semibold text-gray-900">${escapeHtml(domain)}</span> and all <span class="font-semibold text-gray-900">${this.popupService.getState().sessions.filter((s) => s.domain === domain).length} session(s)</span>? This action cannot be undone.`;
+      `Are you sure you want to delete <span class="text-emphasis">${escapeHtml(domain)}</span> and all <span class="text-emphasis">${this.popupService.getState().sessions.filter((s) => s.domain === domain).length} session(s)</span>? This action cannot be undone.`;
     confirmBtn.querySelector("span:last-child")!.textContent = "Delete Website";
     this.show(this.deleteModal);
   }
@@ -514,9 +521,29 @@ class PopupController {
     }
   }
 
-  private faviconFor(domain: string): string {
-    const host = domain.split(":")[0];
-    return `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(host)}`;
+  private bindFavicon(img: HTMLImageElement, domain: string): void {
+    const origin = `https://${domain}`;
+    const sources = [
+      `${origin}/favicon.ico`,
+      `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(domain)}`,
+      PopupController.FAVICON_FALLBACK,
+    ];
+
+    let attempt = 0;
+    img.onerror = () => {
+      attempt += 1;
+      if (attempt < sources.length) {
+        img.src = sources[attempt];
+      } else {
+        img.onerror = null;
+      }
+    };
+
+    img.onload = () => {
+      img.onerror = null;
+    };
+
+    img.src = sources[0];
   }
 
   private formatLastUsed(timestamp: number): string {

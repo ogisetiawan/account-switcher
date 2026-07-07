@@ -9,246 +9,189 @@
     <meta name="web_author" content="ogisetiawan.github.io">
     <title>Account Switcher - Chrome Extension</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> -->
+</head>
 
-<body class="w-96 min-h-screen flex flex-col">
-    <main class="flex flex-col flex-grow bg-gray-50" role="main">
-        <!-- /?@ Main Page - Website Selection Grid -->
+<body>
+    <main class="app__main" role="main">
         <div id="main-page" class="page">
-            <!--//?  Header Section -->
-            <header class="flex justify-between items-center p-4 pb-2" role="banner">
-                <h1 class="flex items-center space-x-2 text-xl font-bold text-gray-800">
-                    <img src="../assets/img/account-switcher.png" alt="Account Switcher Logo"
-                        class="w-6 h-6 flex-shrink-0" />
-                    <span>Account Switcher</span>
+            <header class="page-header" role="banner">
+                <h1 class="page-header__brand">
+                    <img src="../assets/img/account-switcher.png" alt="Account Switcher Logo" class="page-header__logo" />
+                    <span class="page-header__title">Account Switcher</span>
                 </h1>
 
-                <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
-                    <button type="button" id="addBtn" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        title="Add session" aria-label="Add new session" data-action="add-session">
-                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
+                <nav class="page-header__nav" role="navigation" aria-label="Main actions">
+                    <button type="button" id="addBtn" class="icon-btn" title="Add session" aria-label="Add new session" data-action="add-session">
+                        <span class="material-symbols-rounded" aria-hidden="true">add_circle</span>
                     </button>
-
-                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        title="Save session" aria-label="Save current session" data-action="save-session">
-                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
+                    <button type="button" class="icon-btn" title="Save session" aria-label="Save current session" data-action="save-session">
+                        <span class="material-symbols-rounded" aria-hidden="true">save</span>
                     </button>
                 </nav>
             </header>
 
-            <!--//? Search Section -->
-            <section class="px-4 mb-4" role="search">
-                <div class="relative">
+            <section class="search" role="search">
+                <div class="search__field">
                     <label for="website-search" class="sr-only">Search for websites</label>
-                    <span
-                        class="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                        aria-hidden="true">
-                        search
-                    </span>
-                    <input id="website-search" type="search"
-                        class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300 transition-all text-base"
-                        placeholder="Find a website..." autocomplete="off" spellcheck="false" data-search="websites" />
+                    <span class="material-symbols-rounded search__icon" aria-hidden="true">search</span>
+                    <input id="website-search" type="search" class="search__input" placeholder="Find a website..." autocomplete="off" spellcheck="false" data-search="websites" />
                 </div>
             </section>
 
-            <!--//? Website Selection Grid -->
-            <section class="px-4 mb-6 " aria-labelledby="website-selection-heading">
+            <section class="site-section" aria-labelledby="website-selection-heading">
                 <h2 id="website-selection-heading" class="sr-only">Select Website</h2>
-
-                <div class="site-grid grid grid-cols-4 gap-4" role="group" aria-label="Available websites">
-
-                </div>
+                <div class="site-grid" role="group" aria-label="Available websites"></div>
             </section>
         </div>
 
-        <!-- /?@ Halaman Detail - Session List -->
         <div id="detail-page" class="page hidden">
-            <!--//? Header with back button -->
-            <header class="flex items-center p-4 pb-2 detail-header" role="banner">
-                <button type="button"
-                    class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring mr-2 back-button"
-                    title="Back" aria-label="Back to main page" data-action="back-to-main">
-                    <span class="material-symbols-rounded text-gray-600 pt-2" aria-hidden="true">arrow_back</span>
+            <header class="page-header page-header--detail" role="banner">
+                <button type="button" class="icon-btn icon-btn--back" title="Back" aria-label="Back to main page" data-action="back-to-main">
+                    <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>
                 </button>
 
-                <div class="flex items-center space-x-2 flex-1">
-                    <img id="detail-site-icon" src="" alt="" class="w-6 h-6 flex-shrink-0" />
-                    <h1 id="detail-site-name" class="text-xl font-bold text-gray-800">Sessions</h1>
+                <div class="page-header__brand">
+                    <img id="detail-site-icon" src="" alt="" class="page-header__site-icon" />
+                    <h1 id="detail-site-name" class="page-header__title">Sessions</h1>
                 </div>
 
-                <nav class="flex items-center space-x-1" role="navigation" aria-label="Main actions">
-                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        title="Add session" aria-label="Add new session" data-action="add-session">
-                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">add_circle</span>
+                <nav class="page-header__nav" role="navigation" aria-label="Main actions">
+                    <button type="button" class="icon-btn" title="Add session" aria-label="Add new session" data-action="add-session">
+                        <span class="material-symbols-rounded" aria-hidden="true">add_circle</span>
                     </button>
-
-                    <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                        title="Save session" aria-label="Save current session" data-action="save-session">
-                        <span class="pt-2 material-symbols-rounded text-gray-600" aria-hidden="true">save</span>
+                    <button type="button" class="icon-btn" title="Save session" aria-label="Save current session" data-action="save-session">
+                        <span class="material-symbols-rounded" aria-hidden="true">save</span>
                     </button>
                 </nav>
             </header>
 
-            <!--//? Sessions List -->
-            <section class="flex-grow px-4 pb-20 mt-4" aria-labelledby="sessions-heading">
-                <div class="glassmorphism p-4">
-                    <header class="flex flex-col items-left mb-4">
-                        <h2 id="sessions-heading" class="text-lg font-semibold text-gray-800">
+            <section class="sessions-section" aria-labelledby="sessions-heading">
+                <div class="sessions-panel">
+                    <header class="sessions-panel__header">
+                        <h2 id="sessions-heading" class="sessions-panel__title">
                             Saved Sessions for <span id="detail-site-title">Google</span>
                         </h2>
-                        <div class="text-sm text-gray-500" aria-live="polite">
-                            <span id="session-count">0 sessions</span>
-                        </div>
+                        <span id="session-count" aria-live="polite">0 sessions</span>
                     </header>
 
-                    <!--//?  Sessions List Container -->
                     <div class="scrollable-sessions" role="group" aria-labelledby="sessions-heading">
-                        <ul id="sessions-list" class="space-y-3" role="list">
-                            <!--//? Sessions will be rendered dynamically -->
-                        </ul>
+                        <ul id="sessions-list" class="session-list" role="list"></ul>
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- /?@ Footer -->
-    <footer
-        class="w-full bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.08)] flex items-center justify-between px-4 py-2 mt-auto z-10"
-        role="contentinfo">
-        <!-- //? Left side: Help dan Settings icons -->
-        <div class="flex items-center space-x-0">
-            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                title="Help" aria-label="Help center" data-action="show-help">
-                <span class="material-symbols-rounded text-gray-600" aria-hidden="true">help_center</span>
+    <footer class="footer" role="contentinfo">
+        <div class="footer__actions">
+            <button type="button" class="icon-btn" title="Help" aria-label="Help center" data-action="show-help">
+                <span class="material-symbols-rounded" aria-hidden="true">help_center</span>
             </button>
-
-            <button type="button" class="p-2 rounded-none hover:bg-gray-200 hover:shadow-md focus-ring"
-                title="Settings" aria-label="Settings" data-action="show-settings">
-                <span class="material-symbols-rounded text-gray-600" aria-hidden="true">settings</span>
+            <button type="button" class="icon-btn" title="Settings" aria-label="Settings" data-action="show-settings">
+                <span class="material-symbols-rounded" aria-hidden="true">settings</span>
             </button>
         </div>
 
-        <!-- //? Right side: Copyright text -->
-        <p class="text-sm text-gray-500 flex items-center space-x-2">
+        <p class="footer__credit">
             <span>© 2025 |</span>
-            <img src="../assets/img/logo-mini-qnr.svg" alt="QNR Logo" class="w-3 h-3 flex-shrink-0 mt-1" />
-            <a class="text-orange-500 hover:text-orange-700 transition-colors font-semibold"
-                href="https://ogisetiawan.github.io" target="_blank" rel="noopener">
-                qnr.dev
-            </a>
+            <img src="../assets/img/logo-mini-qnr.svg" alt="QNR Logo" class="footer__logo" />
+            <a class="footer__link" href="https://ogisetiawan.github.io" target="_blank" rel="noopener">qnr.dev</a>
         </p>
-
     </footer>
 
-
-    <!--//@ Loading overlay for better UX -->
-    <div id="loading-overlay"
-        class="hidden fixed inset-0 modal-blur-background z-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg p-6 shadow-xl flex items-center space-x-3">
-            <div class="loading"></div>
-            <span class="text-gray-700">Switching session...</span>
+    <div id="loading-overlay" class="overlay hidden">
+        <div class="overlay__card">
+            <div class="loading" aria-hidden="true"></div>
+            <span class="overlay__text">Switching session...</span>
         </div>
     </div>
 
-    <!-- //@ Save Session Modal -->
-    <div id="saveModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Save Session</h3>
-                <button id="closeSaveModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="saveModal" class="modal hidden">
+        <div class="modal__dialog">
+            <div class="modal__header">
+                <h3 class="modal__title">Save Session</h3>
+                <button id="closeSaveModal" type="button" title="Close" aria-label="Close" class="modal__close">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <div class="p-6">
-                <div class="mb-4">
-                    <label for="websiteUrl" class="block text-sm font-medium text-gray-700 mb-2">Website Address</label>
-                    <input type="url" id="websiteUrl" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="https://example.com">
-                    <div id="websiteUrlError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+            <div class="modal__body">
+                <div class="form-field">
+                    <label for="websiteUrl" class="form-field__label">Website Address</label>
+                    <input type="url" id="websiteUrl" class="form-field__input" placeholder="https://example.com">
+                    <div id="websiteUrlError" class="form-field__error hidden"></div>
                 </div>
-                <div class="mb-6">
-                    <label for="sessionName" class="block text-sm font-medium text-gray-700 mb-2">Session Name</label>
-                    <input type="text" id="sessionName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="My Session">
-                    <div id="sessionNameError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+                <div class="form-field">
+                    <label for="sessionName" class="form-field__label">Session Name</label>
+                    <input type="text" id="sessionName" class="form-field__input" placeholder="My Session">
+                    <div id="sessionNameError" class="form-field__error hidden"></div>
                 </div>
             </div>
-            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
-                <button id="cancelSaveModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
-                    Cancel
-                </button>
-                <button id="saveSaveModal" title="Save session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
-                    <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
+            <div class="modal__footer">
+                <button id="cancelSaveModal" type="button" title="Cancel" class="btn btn--secondary">Cancel</button>
+                <button id="saveSaveModal" type="button" title="Save session" class="btn btn--primary">
+                    <span class="material-symbols-rounded" aria-hidden="true">check</span>
                     <span>Save</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- //@ Rename Session Modal -->
-    <div id="renameModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Rename Session</h3>
-                <button id="closeRenameModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="renameModal" class="modal hidden">
+        <div class="modal__dialog">
+            <div class="modal__header">
+                <h3 class="modal__title">Rename Session</h3>
+                <button id="closeRenameModal" type="button" title="Close" aria-label="Close" class="modal__close">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <div class="p-6">
-                <div class="mb-2">
-                    <label for="renameSessionName" class="block text-sm font-medium text-gray-700 mb-2">Session Name</label>
-                    <input type="text" id="renameSessionName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="My Session">
-                    <div id="renameNameError" class="error-message hidden mt-1 text-sm text-red-600"></div>
+            <div class="modal__body">
+                <div class="form-field">
+                    <label for="renameSessionName" class="form-field__label">Session Name</label>
+                    <input type="text" id="renameSessionName" class="form-field__input" placeholder="My Session">
+                    <div id="renameNameError" class="form-field__error hidden"></div>
                 </div>
             </div>
-            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
-                <button id="cancelRenameModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
-                    Cancel
-                </button>
-                <button id="confirmRenameModal" title="Rename session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
-                    <span class="material-symbols-rounded text-lg" aria-hidden="true">check</span>
+            <div class="modal__footer">
+                <button id="cancelRenameModal" type="button" title="Cancel" class="btn btn--secondary">Cancel</button>
+                <button id="confirmRenameModal" type="button" title="Rename session" class="btn btn--primary">
+                    <span class="material-symbols-rounded" aria-hidden="true">check</span>
                     <span>Rename</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- //@ Delete Session / Delete Website Modal -->
-    <div id="deleteModal" class="fixed inset-0 modal-blur-background hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 id="deleteModalTitle" class="text-lg font-semibold text-gray-900">Delete Session</h3>
-                <button id="closeDeleteModal" title="Close" aria-label="Close" class="text-gray-400 hover:text-gray-600 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="deleteModal" class="modal hidden">
+        <div class="modal__dialog">
+            <div class="modal__header">
+                <h3 id="deleteModalTitle" class="modal__title">Delete Session</h3>
+                <button id="closeDeleteModal" type="button" title="Close" aria-label="Close" class="modal__close">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <div class="p-6">
-                <p id="deleteModalMessage" class="text-sm text-gray-600">
+            <div class="modal__body">
+                <p id="deleteModalMessage" class="modal__text">
                     Are you sure you want to delete this item? This action cannot be undone.
                 </p>
             </div>
-            <div class="modal-flex modal-justify-end space-x-2 p-6 border-t border-gray-200">
-                <button id="cancelDeleteModal" title="Cancel" class="glassmorphism-btn glassmorphism-btn-secondary px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200">
-                    Cancel
-                </button>
-                <button id="confirmDeleteModal" title="Delete session" class="glassmorphism-btn glassmorphism-btn-primary px-4 py-2 text-sm font-medium text-white rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 flex items-center space-x-1">
-                    <span class="material-symbols-rounded text-lg" aria-hidden="true">delete</span>
+            <div class="modal__footer">
+                <button id="cancelDeleteModal" type="button" title="Cancel" class="btn btn--secondary">Cancel</button>
+                <button id="confirmDeleteModal" type="button" title="Delete session" class="btn btn--primary">
+                    <span class="material-symbols-rounded" aria-hidden="true">delete</span>
                     <span>Delete</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- //@ Toast notification -->
-    <div id="toast" role="status" aria-live="polite">
-    </div>
+    <div id="toast" role="status" aria-live="polite"></div>
 
-    <!--//@ Scripts -->
     <script src="./index.js" defer></script>
 </body>
 
