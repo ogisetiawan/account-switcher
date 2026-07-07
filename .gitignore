@@ -17,3 +17,4 @@ package-lock.json
 
 # Bun (keep for backward compatibility)
 bun.lock
+_dist/
