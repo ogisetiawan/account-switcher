@@ -29,6 +29,7 @@ export class PopupService {
       this.state.currentDomain = getDomainFromUrl(this.state.currentTab.url);
 
       await this.loadStorageData();
+      await this.syncActiveSessionFromCurrentState();
 
       return { ...this.state };
     } catch (error) {
@@ -226,5 +227,110 @@ export class PopupService {
       console.error("Error saving storage data:", error);
       throw new Error("Failed to save storage data");
     }
+  }
+
+  private async syncActiveSessionFromCurrentState(): Promise<void> {
+    const currentDomain = this.state.currentDomain;
+    const currentTabId = this.state.currentTab.id;
+    if (!currentDomain || currentTabId == null) {
+      return;
+    }
+
+    const domainSessions = this.state.sessions.filter((session) => session.domain === currentDomain);
+    if (domainSessions.length === 0) {
+      return;
+    }
+
+    try {
+      const response = await this.chromeApi.sendMessage<StoredSession | null>({
+        action: MESSAGE_ACTIONS.GET_CURRENT_SESSION,
+        domain: currentDomain,
+        tabId: currentTabId,
+      });
+
+      if (!response.success || !response.data || !this.hasSessionData(response.data)) {
+        return;
+      }
+
+      const liveSession = response.data;
+      const activeSessionId = this.state.activeSessions[currentDomain];
+      const activeSession = activeSessionId
+        ? domainSessions.find((session) => session.id === activeSessionId)
+        : undefined;
+
+      // If current active session exists but content changed (e.g. expired login then relogin),
+      // update it in-place so active session is always the latest logged-in state.
+      if (activeSession) {
+        if (!this.isSessionContentEqual(activeSession, liveSession)) {
+          activeSession.cookies = liveSession.cookies;
+          activeSession.localStorage = liveSession.localStorage;
+          activeSession.sessionStorage = liveSession.sessionStorage;
+        }
+        activeSession.lastUsed = Date.now();
+        await this.saveStorageData();
+        return;
+      }
+
+      const matchedSession = domainSessions.find((session) => this.isSessionContentEqual(session, liveSession));
+      if (matchedSession) {
+        this.state.activeSessions[currentDomain] = matchedSession.id;
+        matchedSession.lastUsed = Date.now();
+        await this.saveStorageData();
+        return;
+      }
+
+      const autoSession: SessionData = {
+        ...liveSession,
+        id: generateId(),
+        name: `Auto ${currentDomain}`,
+        domain: currentDomain,
+        createdAt: Date.now(),
+        lastUsed: Date.now(),
+      };
+
+      this.state.sessions.push(autoSession);
+      this.state.activeSessions[currentDomain] = autoSession.id;
+      await this.saveStorageData();
+    } catch (error) {
+      console.error("Auto-sync active session error:", error);
+    }
+  }
+
+  private hasSessionData(session: StoredSession): boolean {
+    return (
+      session.cookies.length > 0 ||
+      Object.keys(session.localStorage).length > 0 ||
+      Object.keys(session.sessionStorage).length > 0
+    );
+  }
+
+  private isSessionContentEqual(session: StoredSession, live: StoredSession): boolean {
+    if (session.cookies.length !== live.cookies.length) return false;
+
+    const leftCookies = [...session.cookies]
+      .map((cookie) => [cookie.domain, cookie.path ?? "/", cookie.name, cookie.value].join("|"))
+      .sort();
+    const rightCookies = [...live.cookies]
+      .map((cookie) => [cookie.domain, cookie.path ?? "/", cookie.name, cookie.value].join("|"))
+      .sort();
+
+    if (leftCookies.join("||") !== rightCookies.join("||")) return false;
+
+    const leftLocal = JSON.stringify(this.sortRecord(session.localStorage));
+    const rightLocal = JSON.stringify(this.sortRecord(live.localStorage));
+    if (leftLocal !== rightLocal) return false;
+
+    const leftSession = JSON.stringify(this.sortRecord(session.sessionStorage));
+    const rightSession = JSON.stringify(this.sortRecord(live.sessionStorage));
+    return leftSession === rightSession;
+  }
+
+  private sortRecord(record: Record<string, string>): Record<string, string> {
+    return Object.keys(record)
+      .sort()
+      .reduce<Record<string, string>>((acc, key) => {
+        acc[key] = record[key];
+        return acc;
+      }, {});
   }
 }
