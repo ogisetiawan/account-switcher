@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Switcher — One-Click Multi-Session Browser Extension</title>
+  <meta name="description" content="Stop the logout-login cycle. Account Switcher is a free, local-only browser extension for switching website sessions in one click — perfect for web dev UAT, multi-account workflows, and AI tool rate limits (ChatGPT, Claude, DeepSeek).">
+  <meta name="keywords" content="account switcher, browser extension, multi session, cookie switcher, UAT testing, ChatGPT multiple accounts, Claude, DeepSeek, web developer tools">
+  <meta name="author" content="@ogisetiawan">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ogisetiawan.github.io/account-switcher/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Account Switcher — One-Click Multi-Session Management">
+  <meta property="og:description" content="Secure, local-only multi-session management in one click. No cloud. No tracking. Built for developers and power users.">
+  <meta property="og:image" content="assets/screenshoot/preview/homepage.png">
+  <meta property="og:url" content="https://ogisetiawan.github.io/account-switcher/">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Account Switcher — One-Click Multi-Session Management">
+  <meta name="twitter:description" content="Secure, local-only multi-session management in one click.">
+
+  <link rel="icon" type="image/png" href="assets/icons/icon-32.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-128.png">
+  <link rel="stylesheet" href="assets/css/site.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Account Switcher",
+    "applicationCategory": "BrowserApplication",
+    "operatingSystem": "Chrome, Firefox",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Local-only browser extension for saving and switching website sessions in one click.",
+    "author": { "@type": "Person", "name": "Ogi Setiawan", "url": "https://ogisetiawan.github.io" }
+  }
+  </script>
+</head>
+<body>
+
+  <nav class="site-nav" aria-label="Primary">
+    <div class="container site-nav__inner">
+      <a href="index.html" class="site-nav__brand">
+        <img src="assets/img/account-switcher.png" alt="" width="32" height="32">
+        Account Switcher
+      </a>
+      <ul class="site-nav__links">
+        <li><a href="#use-cases">Use cases</a></li>
+        <li><a href="#how-it-works">How to use</a></li>
+        <li><a href="#developers">Developers</a></li>
+        <li><a href="#changelog">Changelog</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li>
+      </ul>
+      <div class="site-nav__actions">
+        <a href="https://chromewebstore.google.com/detail/account-switcher/lbfnppdlkmbhiallnmpalgcfaifpigmm" class="btn btn--primary btn--sm" target="_blank" rel="noopener noreferrer">Install Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container hero__grid">
+        <div class="hero__content">
+          <span class="hero__eyebrow">Chrome & Firefox · 100% local storage</span>
+          <h1 id="hero-title" class="hero__title">
+            Kill the <em>Logout → Login</em> loop.<br>
+            Switch accounts in one click.
+          </h1>
+          <p class="hero__subtitle">
+            <strong>Account Switcher</strong> keeps multiple website sessions on your device — securely, locally, and instantly.
+            Built for web dev UAT testing, multi-account workflows, and bypassing AI rate &amp; token limits on ChatGPT, Claude, and DeepSeek.
+          </p>
+          <div class="hero__tags" role="list" aria-label="Use cases">
+            <span class="hero__tag" role="listitem">UAT / QA testing</span>
+            <span class="hero__tag" role="listitem">Multi-account SaaS</span>
+            <span class="hero__tag" role="listitem">ChatGPT · Claude · DeepSeek</span>
+            <span class="hero__tag" role="listitem">Zero cloud sync</span>
+          </div>
+          <div class="hero__cta">
+            <a href="https://chromewebstore.google.com/detail/account-switcher/lbfnppdlkmbhiallnmpalgcfaifpigmm" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Install for Free</a>
+            <a href="#use-cases" class="btn btn--secondary">Learn More</a>
+          </div>
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__mockup">
+            <div class="hero__mockup-bar">
+              <span class="hero__mockup-dot"></span>
+              <span class="hero__mockup-dot"></span>
+              <span class="hero__mockup-dot"></span>
+            </div>
+            <img src="assets/screenshoot/preview/homepage.png" alt="Account Switcher extension popup showing saved website sessions" width="384" height="600" loading="eager">
+          </div>
+          <div class="hero__float hero__float--1">
+            <img src="assets/screenshoot/preview/switch-session.png" alt="" width="160" loading="lazy">
+          </div>
+          <div class="hero__float hero__float--2">
+            <img src="assets/screenshoot/preview/save-session.png" alt="" width="140" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use cases -->
+    <section id="use-cases" class="section section--alt" aria-labelledby="use-cases-title">
+      <div class="container">
+        <header class="section__header">
+          <span class="section__label">Use cases</span>
+          <h2 id="use-cases-title" class="section__title">Who uses Account Switcher?</h2>
+          <p class="section__desc">
+            Real scenarios where one-click session switching saves hours — from staging tests to AI workflows and multi-client work.
+          </p>
+        </header>
+        <div class="use-cases">
+          <article class="use-case-card">
+            <div class="use-case-card__icon" aria-hidden="true">🧪</div>
+            <h3 class="use-case-card__title">Web Dev UAT &amp; QA</h3>
+            <p class="use-case-card__text">
+              Jump between admin, user, and guest roles on staging without logging out. Ideal for regression testing, bug reproduction, and sign-off across personas.
+            </p>
+          </article>
+          <article class="use-case-card">
+            <div class="use-case-card__icon" aria-hidden="true">🤖</div>
+            <h3 class="use-case-card__title">AI rate &amp; token limits</h3>
+            <p class="use-case-card__text">
+              Hit the daily cap on ChatGPT, Claude, or DeepSeek? Rotate between saved accounts instantly — each session keeps its own auth state and usage quota.
+            </p>
+          </article>
+          <article class="use-case-card">
+            <div class="use-case-card__icon" aria-hidden="true">🏢</div>
+            <h3 class="use-case-card__title">Multi-account SaaS</h3>
+            <p class="use-case-card__text">
+              Manage personal and work accounts on the same platform — Stripe, Notion, Figma, or internal dashboards — without the logout-login loop.
+            </p>
+          </article>
+          <article class="use-case-card">
+            <div class="use-case-card__icon" aria-hidden="true">🎯</div>
+            <h3 class="use-case-card__title">Client demos &amp; support</h3>
+            <p class="use-case-card__text">
+              Switch to a client's sandbox or demo account before a call. Support teams can reproduce issues in the exact account context without asking for credentials again.
+            </p>
+          </article>
+          <article class="use-case-card">
+            <div class="use-case-card__icon" aria-hidden="true">💼</div>
+            <h3 class="use-case-card__title">Agency &amp; freelancer</h3>
+            <p class="use-case-card__text">
+              Juggle multiple client environments from one browser. Save each client's logged-in session and switch in one click — no separate browser profiles needed.
+            </p>
+          </article>
+          <article class="use-case-card">
+            <div class="use-case-card__icon" aria-hidden="true">📱</div>
+            <h3 class="use-case-card__title">Social &amp; marketing teams</h3>
+            <p class="use-case-card__text">
+              Handle several brand or client accounts on social platforms and ad managers. Stay signed in to all of them and swap contexts without clearing cookies.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to use (steps + screenshots) -->
+    <section id="how-it-works" class="section" aria-labelledby="how-title">
+      <div class="container">
+        <header class="section__header">
+          <span class="section__label">How to use</span>
+          <h2 id="how-title" class="section__title">From login to one-click switch</h2>
+          <p class="section__desc">
+            Save any authenticated session locally, add multiple accounts per website, and switch between them instantly — no logout required.
+          </p>
+        </header>
+
+        <div id="walkthrough" class="walkthrough" aria-live="polite">
+          <p class="walkthrough__loading">Loading guide…</p>
+        </div>
+
+        <p id="walkthrough-note" class="walkthrough__note"></p>
+      </div>
+    </section>
+
+    <noscript>
+      <div class="container" style="margin-bottom:3rem">
+        <ol class="walkthrough" style="list-style:none;padding:0">
+          <li class="walkthrough__item walkthrough__item--compact"><strong>1.</strong> Open any authenticated website and log in.</li>
+          <li class="walkthrough__item walkthrough__item--compact"><strong>2.</strong> Open Account Switcher from the toolbar.</li>
+          <li class="walkthrough__item walkthrough__item--compact"><strong>3.</strong> Click Save Session (disk icon) and name your session.</li>
+          <li class="walkthrough__item walkthrough__item--compact"><strong>4.</strong> Use Add Session (+) to save more accounts on the same site.</li>
+          <li class="walkthrough__item walkthrough__item--compact"><strong>5.</strong> Pick a saved session from the detail view to switch instantly.</li>
+        </ol>
+      </div>
+    </noscript>
+
+    <!-- Developers -->
+    <section id="developers" class="section" aria-labelledby="dev-title">
+      <div class="container">
+        <header class="section__header">
+          <span class="section__label">Developers</span>
+          <h2 id="dev-title" class="section__title">Built for developers, by a developer</h2>
+          <p class="section__desc">
+            Open source, auditable, and privacy-first. Account Switcher runs entirely in your browser —
+            no backend, no telemetry, no account required. Inspect the code, fork it, or load it unpacked in seconds.
+          </p>
+        </header>
+
+        <div class="dev-panel">
+          <div>
+            <p class="dev-panel__intro">
+              Every session is a local snapshot of cookies and web storage. The extension uses Manifest V3 with
+              strict TypeScript, works on Chrome and Firefox from one codebase, and keeps your data in
+              <code>chrome.storage.local</code> — never on a remote server.
+            </p>
+            <ul class="dev-panel__list">
+              <li>Open source on GitHub — audit the code yourself</li>
+              <li>TypeScript + Manifest V3 — modern, strict, cross-browser</li>
+              <li>No telemetry, no external APIs (except optional favicon fetch)</li>
+              <li>Session data = cookies + localStorage + sessionStorage snapshot</li>
+              <li>Auto-sync keeps active sessions fresh after re-login</li>
+            </ul>
+            <p class="dev-panel__cta">
+              <a href="https://github.com/ogisetiawan/account-switcher" class="btn btn--primary btn--sm" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </p>
+          </div>
+          <pre class="dev-panel__code"><code><span class="comment">// What gets saved per session</span>
+{
+  <span class="key">"name"</span>: <span class="val">"Admin UAT"</span>,
+  <span class="key">"domain"</span>: <span class="val">"app.example.com"</span>,
+  <span class="key">"cookies"</span>: [...],
+  <span class="key">"localStorage"</span>: {...},
+  <span class="key">"sessionStorage"</span>: {...}
+}
+
+<span class="comment">// Stored locally — never leaves your device</span>
+chrome.storage.local</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Changelog -->
+    <section id="changelog" class="section section--alt" aria-labelledby="changelog-title">
+      <div class="container">
+        <header class="section__header">
+          <span class="section__label">Changelog</span>
+          <h2 id="changelog-title" class="section__title">What's new</h2>
+          <p class="section__desc">
+            Release history and the features currently available in the extension.
+            Current build: <strong id="changelog-version">v2.1.2</strong>.
+          </p>
+        </header>
+
+        <div class="changelog-layout">
+          <aside class="changelog-features-wrap" aria-labelledby="active-features-title">
+            <div class="changelog-features__head">
+              <h3 id="active-features-title">Active features</h3>
+            </div>
+            <ul id="changelog-features" class="changelog-features" aria-live="polite">
+              <li class="changelog__loading">Loading features…</li>
+            </ul>
+          </aside>
+
+          <div class="changelog-timeline-wrap">
+            <h3 class="visually-hidden">Release timeline</h3>
+            <div id="changelog-timeline" class="changelog-timeline" aria-live="polite">
+              <p class="changelog__loading">Loading release notes…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Install -->
+    <section id="install" class="section" aria-labelledby="install-title">
+      <div class="container">
+        <header class="section__header">
+          <span class="section__label">Get started</span>
+          <h2 id="install-title" class="section__title">Install for free</h2>
+          <p class="section__desc">Available on the Chrome Web Store. Firefox Add-ons listing coming soon.</p>
+        </header>
+        <div class="install-grid">
+          <article class="install-card">
+            <img class="install-card__icon install-card__icon--browser" src="assets/img/browser-chrome.svg" alt="Google Chrome logo" width="56" height="56" loading="lazy">
+            <h3 class="install-card__title">Google Chrome</h3>
+            <p class="install-card__text">
+              Available on the Chrome Web Store. Click below to install directly — no build step required.
+            </p>
+            <a href="https://chromewebstore.google.com/detail/account-switcher/lbfnppdlkmbhiallnmpalgcfaifpigmm" class="btn btn--primary" target="_blank" rel="noopener noreferrer">
+              Add to Chrome
+            </a>
+          </article>
+          <article class="install-card install-card--disabled">
+            <img class="install-card__icon install-card__icon--browser" src="assets/img/browser-firefox.svg" alt="Mozilla Firefox logo" width="56" height="56" loading="lazy">
+            <h3 class="install-card__title">Mozilla Firefox</h3>
+            <p class="install-card__text">
+              Firefox Add-ons listing is coming soon. In the meantime you can load the extension manually from the GitHub repository.
+            </p>
+            <span class="btn btn--secondary install-card__btn--disabled" aria-disabled="true">
+              Coming soon
+            </span>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+        <div>
+          <p class="site-footer__brand">Account Switcher</p>
+          <p>Local-only multi-session management for Chrome and Firefox. Free and open source.</p>
+        </div>
+        <div>
+          <p class="site-footer__brand" style="font-size:0.875rem;margin-bottom:0.75rem">Product</p>
+          <ul class="site-footer__links">
+            <li><a href="#use-cases">Use cases</a></li>
+            <li><a href="#how-it-works">How to use</a></li>
+            <li><a href="#changelog">Changelog</a></li>
+            <li><a href="#install">Install</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="site-footer__brand" style="font-size:0.875rem;margin-bottom:0.75rem">Legal &amp; links</p>
+          <ul class="site-footer__links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="https://github.com/ogisetiawan/account-switcher" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://ogisetiawan.github.io" target="_blank" rel="noopener">qnr.dev</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <p>&copy; 2026 Account Switcher · Built by <a href="https://ogisetiawan.github.io" target="_blank" rel="noopener">@ogisetiawan</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/how-to-use.js" defer></script>
+  <script src="assets/js/changelog.js" defer></script>
+</body>
+</html>

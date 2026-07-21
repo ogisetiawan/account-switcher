@@ -1,0 +1,96 @@
+{
+  "current_version": "2.1.2",
+  "active_features": [
+    {
+      "name": "Save session",
+      "detail": "Snapshot cookies, localStorage & sessionStorage"
+    },
+    {
+      "name": "One-click switch",
+      "detail": "Restore any saved session instantly"
+    },
+    {
+      "name": "Add session",
+      "detail": "Clear current state & log in with another account"
+    },
+    {
+      "name": "Rename & delete",
+      "detail": "Manage sessions from the popup"
+    },
+    {
+      "name": "Domain management",
+      "detail": "Grid view + delete all sessions per website"
+    },
+    {
+      "name": "Auto-sync",
+      "detail": "Active session updates after re-login"
+    },
+    {
+      "name": "Smart tab routing",
+      "detail": "Find or open tab for the target domain"
+    },
+    {
+      "name": "Toast notifications",
+      "detail": "Inline feedback for every action"
+    },
+    {
+      "name": "Local-only storage",
+      "detail": "chrome.storage.local — zero cloud sync"
+    },
+    {
+      "name": "Chrome & Firefox",
+      "detail": "Manifest V3, cross-browser build"
+    }
+  ],
+  "releases": [
+    {
+      "version": "2.1.2",
+      "date": "July 2026",
+      "label": "Latest",
+      "title": "UI polish & session auto-sync",
+      "notes": [
+        "Redesigned popup with semantic CSS and improved layout",
+        "Active session auto-sync after re-login or token refresh",
+        "Updated extension icons and Manifest V3 permissions",
+        "Favicon fallback chain for website grid"
+      ]
+    },
+    {
+      "version": "2.0.0",
+      "date": "June 2026",
+      "label": null,
+      "title": "New popup experience",
+      "notes": [
+        "Two-page UI: website grid and session detail view",
+        "Save, rename, and delete session modals with validation",
+        "Delete all sessions for a domain",
+        "Toast notification system",
+        "Smart tab management — find or create tab when switching"
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "May 2026",
+      "label": null,
+      "title": "Session management improvements",
+      "notes": [
+        "Multi-session support per domain",
+        "Active session tracking per website",
+        "Improved cookie and web storage capture",
+        "Error handling and input validation"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "April 2026",
+      "label": null,
+      "title": "Initial public release",
+      "notes": [
+        "Core session save & switch engine",
+        "Cookie + localStorage + sessionStorage architecture",
+        "Local-only persistence via chrome.storage.local",
+        "Manifest V3 background service worker"
+      ]
+    }
+  ]
+}

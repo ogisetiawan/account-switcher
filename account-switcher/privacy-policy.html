@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Account Switcher</title>
+  <meta name="description" content="Privacy Policy for Account Switcher browser extension. All session data is stored locally on your device — no cloud, no tracking.">
+  <meta name="author" content="@ogisetiawan">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ogisetiawan.github.io/account-switcher/privacy-policy.html">
+
+  <link rel="icon" type="image/png" href="assets/icons/icon-32.png">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+  <nav class="site-nav" aria-label="Primary">
+    <div class="container site-nav__inner">
+      <a href="index.html" class="site-nav__brand">
+        <img src="assets/img/account-switcher.png" alt="" width="32" height="32">
+        Account Switcher
+      </a>
+      <ul class="site-nav__links">
+        <li><a href="index.html#use-cases">Use cases</a></li>
+        <li><a href="index.html#how-it-works">How to use</a></li>
+        <li><a href="index.html#developers">Developers</a></li>
+        <li><a href="index.html#changelog">Changelog</a></li>
+        <li><a href="privacy-policy.html" aria-current="page">Privacy</a></li>
+      </ul>
+      <div class="site-nav__actions">
+        <a href="index.html#install" class="btn btn--primary btn--sm">Install Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p>Account Switcher — Browser Extension</p>
+    </div>
+  </header>
+
+  <main class="legal">
+    <div class="container">
+      <p class="legal__updated"><strong>Last Updated:</strong> July 1, 2026</p>
+
+      <div class="legal__highlight">
+        <p><strong>TL;DR:</strong> Account Switcher stores all data locally on your device using Chrome's built-in storage API. We never collect, transmit, or share your personal data, browsing history, or session information with any servers or third parties. Your data stays on your machine.</p>
+      </div>
+
+      <section>
+        <h2>1. Introduction</h2>
+        <p>Account Switcher ("the Extension") is a browser tool that lets you save, manage, and switch between multiple account sessions on the same website without logging out and back in. This Privacy Policy explains what information the Extension accesses and how it handles that data.</p>
+        <p>By installing and using the Extension, you agree to the practices described in this policy.</p>
+      </section>
+
+      <section>
+        <h2>2. Data We Collect</h2>
+
+        <div class="card">
+          <h3>2.1 Session Data (Stored Locally)</h3>
+          <p>The Extension saves <strong>cookie data and browser storage</strong> from websites you choose to save sessions for. This data includes:</p>
+          <ul>
+            <li><strong>Cookies</strong> — authentication tokens, session identifiers, and other cookie data from websites you actively save.</li>
+            <li><strong>Web storage</strong> — localStorage and sessionStorage content from websites you actively save.</li>
+            <li><strong>Session metadata</strong> — a name you assign to each saved session, the website domain, and a timestamp of when the session was last used.</li>
+          </ul>
+          <p>All session data is stored exclusively in your browser's local storage via the <code>chrome.storage.local</code> API. It never leaves your device.</p>
+        </div>
+
+        <div class="card">
+          <h3>2.2 Tab Information</h3>
+          <p>When the Extension popup opens, it reads the <strong>URL of the currently active tab</strong> to determine which website you are on. This URL is used only to:</p>
+          <ul>
+            <li>Identify which website's saved sessions to display.</li>
+            <li>Save a session for the current website.</li>
+            <li>Switch sessions on the correct tab.</li>
+          </ul>
+          <p>Tab URLs are <strong>not stored</strong> permanently. They are used in-memory while the popup is open and discarded when the popup closes.</p>
+        </div>
+
+        <div class="card">
+          <h3>2.3 No Personal Information</h3>
+          <p>The Extension does <strong>not</strong> collect, store, or transmit:</p>
+          <ul>
+            <li>Your name, email address, or any contact information.</li>
+            <li>Your browsing history (aside from the current tab URL used temporarily in-memory).</li>
+            <li>Passwords, credit card numbers, or other sensitive financial data.</li>
+            <li>IP addresses or geolocation data.</li>
+            <li>Device identifiers or hardware information.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>3. How We Use Data</h2>
+        <p>The data accessed by the Extension is used exclusively to provide its core functionality:</p>
+        <ul>
+          <li><strong>Save sessions:</strong> capture and store cookies/storage from a website so you can restore that session later.</li>
+          <li><strong>Switch sessions:</strong> restore a previously saved session by injecting its cookies/storage back into the browser.</li>
+          <li><strong>Create new sessions:</strong> clear the current session data so you can log in with a different account.</li>
+          <li><strong>Organize sessions:</strong> display your saved sessions grouped by website, with names you assign.</li>
+        </ul>
+        <p>We do <strong>not</strong> use your data for analytics, advertising, profiling, or any purpose beyond the Extension's stated functionality.</p>
+      </section>
+
+      <section>
+        <h2>4. Data Storage &amp; Retention</h2>
+
+        <div class="card">
+          <h3>4.1 Storage Location</h3>
+          <p>All data is stored <strong>locally on your device</strong> using the <code>chrome.storage.local</code> API. This storage is sandboxed by the browser and is not accessible to other extensions or websites.</p>
+        </div>
+
+        <div class="card">
+          <h3>4.2 Data Retention</h3>
+          <p>Data is retained until you choose to delete it. You can:</p>
+          <ul>
+            <li><strong>Delete a single session</strong> — via the session action menu in the Extension popup.</li>
+            <li><strong>Delete all sessions for a website</strong> — via the delete icon on the website grid.</li>
+            <li><strong>Remove all Extension data</strong> — by uninstalling the Extension from your browser. Uninstalling automatically removes all locally stored data.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>5. Data Sharing &amp; Third Parties</h2>
+        <p>The Extension <strong>does not share, sell, or transmit</strong> any data to third parties. Specifically:</p>
+        <ul>
+          <li>No data is sent to external servers or APIs owned by the Extension developer.</li>
+          <li>The only external network request the Extension makes is to <strong>Google's favicon service</strong> (<code>https://www.google.com/s2/favicons</code>) to display website icons in the Extension popup. This request includes the website domain (e.g., <code>example.com</code>) and is necessary to show the favicon. Google's use of this data is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</li>
+          <li>The Extension does not use any analytics SDKs, tracking pixels, or telemetry services.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>6. Permissions Explained</h2>
+        <p>The Extension requires the following browser permissions. Here is why each is needed:</p>
+        <ul>
+          <li><strong><code>storage</code></strong> — to save and read your session data (cookies, storage, metadata) locally on your device.</li>
+          <li><strong><code>cookies</code></strong> — to capture and restore cookies from websites when you save or switch sessions.</li>
+          <li><strong><code>tabs</code></strong> — to read the current tab's URL and to programmatically switch tabs when activating a session.</li>
+          <li><strong><code>&lt;all_urls&gt;</code> or <code>activeTab</code></strong> — to access cookies and storage data on the website you are currently viewing. Sessions are saved and restored only for websites you explicitly interact with through the Extension.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Security</h2>
+        <p>Because all data is stored locally in your browser's sandboxed storage, the Extension relies on the browser's built-in security measures to protect your data. We follow these practices:</p>
+        <ul>
+          <li>No external data transmission — there is no server for an attacker to compromise.</li>
+          <li>Minimal permission scope — we request only the permissions absolutely necessary for functionality.</li>
+          <li>Open source code — the Extension source code is publicly available for review on <a href="https://github.com/ogisetiawan/account-switcher" target="_blank" rel="noopener">GitHub</a>, allowing independent security auditing.</li>
+        </ul>
+        <p><strong>However, please be aware:</strong> the Extension saves the full cookie state of a website, which may include authentication tokens. Anyone with physical access to your device while you are using the Extension could potentially access these sessions. Treat your saved sessions with the same care as your browser's saved passwords.</p>
+      </section>
+
+      <section>
+        <h2>8. Your Rights &amp; Choices</h2>
+        <ul>
+          <li><strong>Control your data:</strong> You can view, rename, or delete any saved session directly from the Extension popup.</li>
+          <li><strong>Opt out:</strong> You can uninstall the Extension at any time through your browser's extension management page. Uninstalling removes all data stored by the Extension.</li>
+          <li><strong>Disable:</strong> You can disable the Extension without uninstalling it, which will prevent it from accessing any data until re-enabled.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>9. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last Updated" date at the top of this page. We encourage you to review this policy periodically.</p>
+        <p>If we make material changes, we will provide notice through the Extension's interface (e.g., a notification in the popup).</p>
+      </section>
+
+      <section>
+        <h2>10. Contact</h2>
+        <p>If you have questions, concerns, or requests regarding this Privacy Policy or the Extension's data practices, please reach out:</p>
+        <ul>
+          <li><strong>GitHub:</strong> <a href="https://github.com/ogisetiawan/account-switcher" target="_blank" rel="noopener">github.com/ogisetiawan/account-switcher</a></li>
+          <li><strong>Website:</strong> <a href="https://ogisetiawan.github.io" target="_blank" rel="noopener">ogisetiawan.github.io</a></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+        <div>
+          <p class="site-footer__brand">Account Switcher</p>
+          <p>Local-only multi-session management for Chrome and Firefox. Free and open source.</p>
+        </div>
+        <div>
+          <p class="site-footer__brand" style="font-size:0.875rem;margin-bottom:0.75rem">Product</p>
+          <ul class="site-footer__links">
+            <li><a href="index.html#use-cases">Use cases</a></li>
+            <li><a href="index.html#how-it-works">How to use</a></li>
+            <li><a href="index.html#changelog">Changelog</a></li>
+            <li><a href="index.html#install">Install</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="site-footer__brand" style="font-size:0.875rem;margin-bottom:0.75rem">Legal &amp; links</p>
+          <ul class="site-footer__links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="https://github.com/ogisetiawan/account-switcher" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://ogisetiawan.github.io" target="_blank" rel="noopener">qnr.dev</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer__bottom">
+        <p>&copy; 2026 Account Switcher · Built by <a href="https://ogisetiawan.github.io" target="_blank" rel="noopener">@ogisetiawan</a></p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

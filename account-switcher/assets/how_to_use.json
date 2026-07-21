@@ -1,0 +1,63 @@
+{
+  "how_to_use": [
+    {
+      "step": 1,
+      "title": "Open a website",
+      "action": "Open any website that requires authentication.",
+      "detail": "Navigate to any site where you need to stay signed in — a SaaS dashboard, staging/UAT environment, internal admin panel, or AI chat such as ChatGPT, Claude, or DeepSeek.",
+      "image": null,
+      "image_alt": null
+    },
+    {
+      "step": 2,
+      "title": "Log in with a test account",
+      "action": "Log in using any test account.",
+      "detail": "Complete the normal login flow in your browser. Account Switcher captures the session state after you authenticate — no special setup or API keys required.",
+      "image": null,
+      "image_alt": null
+    },
+    {
+      "step": 3,
+      "title": "Open Account Switcher",
+      "action": "Click the Account Switcher icon in your browser toolbar.",
+      "detail": "The popup opens on the current tab's domain. If you have saved sessions for this site, you'll land on the session detail view automatically.",
+      "image": "assets/screenshoot/preview/homepage.png",
+      "image_alt": "Account Switcher popup showing the website grid with saved domains"
+    },
+    {
+      "step": 4,
+      "title": "Save the current session",
+      "action": "Click Save Session (disk icon) in the popup header.",
+      "detail": "This snapshots the current cookies, localStorage, and sessionStorage for the active website. Use it whenever you're logged in and want to preserve that account context.",
+      "image": "assets/screenshoot/preview/save-session.png",
+      "image_alt": "Save Session button and modal in the extension popup"
+    },
+    {
+      "step": 5,
+      "title": "Name your session",
+      "action": "Enter a session name and confirm save.",
+      "detail": "Give each session a recognizable label — e.g. \"Admin UAT\", \"User A\", or \"ChatGPT Account 2\". The first save for a domain also registers that website in your grid.",
+      "image": "assets/screenshoot/preview/save-session.png",
+      "image_alt": "Session name input when saving a new session"
+    },
+    {
+      "step": 6,
+      "title": "Add another account on the same site",
+      "action": "Click Add Session (+ icon), log in with a different account, then Save Session again.",
+      "detail": "Add Session clears the current browser state so you can sign in with another account on the same domain. Save each account as a separate named session — repeat for as many personas as you need.",
+      "image": "assets/screenshoot/preview/add-session.png",
+      "image_alt": "Add Session flow to create a second account on the same website"
+    },
+    {
+      "step": 7,
+      "title": "Switch sessions in one click",
+      "action": "Open the website, go to its session detail, and pick a saved session.",
+      "detail": "From the homepage grid, select a website to see all saved sessions. Click any session card — Account Switcher restores cookies and storage, reloads the tab, and you're instantly logged in as that account. No logout, no re-login.",
+      "image": "assets/screenshoot/preview/web-session.png",
+      "image_alt": "Session list for a website with multiple saved accounts",
+      "image_secondary": "assets/screenshoot/preview/switch-session.png",
+      "image_secondary_alt": "One-click switch between saved sessions"
+    }
+  ],
+  "note": "All session data is stored locally on your device via chrome.storage.local. Nothing is sent to external servers."
+}
