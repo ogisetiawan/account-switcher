@@ -271,26 +271,15 @@ export class PopupService {
         return;
       }
 
+      // No active session for this domain (e.g. right after "Add Session").
+      // Only re-attach to an already saved session; creating a session always
+      // requires an explicit save from the user.
       const matchedSession = domainSessions.find((session) => this.isSessionContentEqual(session, liveSession));
       if (matchedSession) {
         this.state.activeSessions[currentDomain] = matchedSession.id;
         matchedSession.lastUsed = Date.now();
         await this.saveStorageData();
-        return;
       }
-
-      const autoSession: SessionData = {
-        ...liveSession,
-        id: generateId(),
-        name: `Auto ${currentDomain}`,
-        domain: currentDomain,
-        createdAt: Date.now(),
-        lastUsed: Date.now(),
-      };
-
-      this.state.sessions.push(autoSession);
-      this.state.activeSessions[currentDomain] = autoSession.id;
-      await this.saveStorageData();
     } catch (error) {
       console.error("Auto-sync active session error:", error);
     }

@@ -50,6 +50,15 @@ class PopupController {
   private deleteModal = getElementByIdSafe("deleteModal");
 
   private toastManager: ToastManager;
+  private helpMenuBtn = getElementByIdSafe("help-menu-btn");
+  private helpMenu = getElementByIdSafe("help-menu");
+
+  private static readonly HELP_URLS: Record<string, string> = {
+    "getting-started": "https://ogisetiawan.github.io/account-switcher/#how-it-works",
+    faq: "https://ogisetiawan.github.io/account-switcher/#faq",
+    changelog: "https://ogisetiawan.github.io/account-switcher/#changelog",
+    privacy: "https://ogisetiawan.github.io/account-switcher/privacy-policy.html",
+  };
 
   constructor() {
     this.isExtensionEnvironment =
@@ -152,6 +161,14 @@ class PopupController {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         this.hideAllModals();
+        this.closeHelpMenu();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".help-menu")) {
+        this.closeHelpMenu();
       }
     });
   }
@@ -184,7 +201,13 @@ class PopupController {
         case "delete-domain":
           this.handleDeleteDomain(actionEl.dataset.site ?? "");
           return;
-        case "show-help":
+        case "toggle-help":
+          this.toggleHelpMenu();
+          return;
+        case "open-help":
+          event.preventDefault();
+          this.openHelpLink(actionEl.dataset.help ?? "", (actionEl as HTMLAnchorElement).href);
+          return;
         case "show-settings":
           this.showToast("This feature is coming soon");
           return;
@@ -194,6 +217,41 @@ class PopupController {
     const siteEl = target.closest<HTMLElement>("[data-site]");
     if (siteEl?.dataset.site) {
       this.navigateToDetail(siteEl.dataset.site);
+    }
+  }
+
+  private toggleHelpMenu(): void {
+    const isOpen = !this.helpMenu.classList.contains("hidden");
+    if (isOpen) {
+      this.closeHelpMenu();
+      return;
+    }
+
+    this.helpMenu.classList.remove("hidden");
+    this.helpMenuBtn.setAttribute("aria-expanded", "true");
+    this.helpMenuBtn.closest(".help-menu")?.classList.add("is-open");
+  }
+
+  private closeHelpMenu(): void {
+    this.helpMenu.classList.add("hidden");
+    this.helpMenuBtn.setAttribute("aria-expanded", "false");
+    this.helpMenuBtn.closest(".help-menu")?.classList.remove("is-open");
+  }
+
+  private async openHelpLink(helpKey: string, fallbackHref: string): Promise<void> {
+    const url = PopupController.HELP_URLS[helpKey] || fallbackHref;
+    this.closeHelpMenu();
+
+    try {
+      if (this.isExtensionEnvironment && typeof chrome.tabs?.create === "function") {
+        await chrome.tabs.create({ url });
+        return;
+      }
+
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      console.error("Open help link error:", error);
+      this.showToast("Unable to open help page");
     }
   }
 

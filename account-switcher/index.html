@@ -50,6 +50,7 @@
       <ul class="site-nav__links">
         <li><a href="#use-cases">Use cases</a></li>
         <li><a href="#how-it-works">How to use</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#developers">Developers</a></li>
         <li><a href="#changelog">Changelog</a></li>
         <li><a href="privacy-policy.html">Privacy</a></li>
@@ -193,6 +194,57 @@
       </div>
     </noscript>
 
+    <!-- FAQ -->
+    <section id="faq" class="section section--alt" aria-labelledby="faq-title">
+      <div class="container">
+        <header class="section__header">
+          <span class="section__label">FAQ</span>
+          <h2 id="faq-title" class="section__title">Frequently asked questions</h2>
+          <p class="section__desc">
+            Quick answers about privacy, how sessions work, and what Account Switcher can do.
+          </p>
+        </header>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary class="faq-item__question">Is my data uploaded to a server?</summary>
+            <p class="faq-item__answer">
+              No. All session data stays on your device via <code>chrome.storage.local</code>.
+              Account Switcher does not send cookies, storage, or browsing data to any remote server.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">How do I add a second account on the same website?</summary>
+            <p class="faq-item__answer">
+              Open the extension, click <strong>Add Session</strong> to clear the current login,
+              sign in with the other account in the browser, then click <strong>Save</strong> and name the new session.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">Does switching sessions log me out of other sites?</summary>
+            <p class="faq-item__answer">
+              No. Sessions are scoped per website domain. Switching only replaces cookies and storage
+              for the site you selected — other tabs and domains are left alone.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">Can I use it for ChatGPT, Claude, or DeepSeek?</summary>
+            <p class="faq-item__answer">
+              Yes. Save each AI account as a separate session, then switch when you hit rate or token limits.
+              Each session keeps its own authentication state.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">What browsers are supported?</summary>
+            <p class="faq-item__answer">
+              Chrome is available on the Chrome Web Store. Firefox support is built into the codebase;
+              the Firefox Add-ons listing is coming soon.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- Developers -->
     <section id="developers" class="section" aria-labelledby="dev-title">
       <div class="container">
@@ -316,6 +368,7 @@ chrome.storage.local</code></pre>
           <ul class="site-footer__links">
             <li><a href="#use-cases">Use cases</a></li>
             <li><a href="#how-it-works">How to use</a></li>
+            <li><a href="#faq">FAQ</a></li>
             <li><a href="#changelog">Changelog</a></li>
             <li><a href="#install">Install</a></li>
           </ul>

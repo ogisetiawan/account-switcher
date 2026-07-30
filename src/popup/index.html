@@ -84,9 +84,29 @@
 
     <footer class="footer" role="contentinfo">
         <div class="footer__actions">
-            <button type="button" class="icon-btn" title="Help" aria-label="Help center" data-action="show-help">
-                <span class="material-symbols-rounded" aria-hidden="true">help_center</span>
-            </button>
+            <div class="help-menu">
+                <button type="button" id="help-menu-btn" class="icon-btn" title="Help" aria-label="Help menu" aria-haspopup="menu" aria-expanded="false" data-action="toggle-help">
+                    <span class="material-symbols-rounded" aria-hidden="true">help_center</span>
+                </button>
+                <div id="help-menu" class="help-menu__dropdown hidden" role="menu" aria-label="Help">
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/#how-it-works" data-action="open-help" data-help="getting-started">
+                        <span class="material-symbols-rounded" aria-hidden="true">rocket_launch</span>
+                        Getting Started
+                    </a>
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/#faq" data-action="open-help" data-help="faq">
+                        <span class="material-symbols-rounded" aria-hidden="true">quiz</span>
+                        FAQ
+                    </a>
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/#changelog" data-action="open-help" data-help="changelog">
+                        <span class="material-symbols-rounded" aria-hidden="true">history</span>
+                        Changelog
+                    </a>
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/privacy-policy.html" data-action="open-help" data-help="privacy">
+                        <span class="material-symbols-rounded" aria-hidden="true">policy</span>
+                        Privacy Policy
+                    </a>
+                </div>
+            </div>
             <button type="button" class="icon-btn" title="Settings" aria-label="Settings" data-action="show-settings">
                 <span class="material-symbols-rounded" aria-hidden="true">settings</span>
             </button>
