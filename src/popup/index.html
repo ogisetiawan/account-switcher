@@ -112,6 +112,23 @@
                     <span class="material-symbols-rounded" aria-hidden="true">settings</span>
                 </button>
                 <div id="settings-menu" class="settings-menu__dropdown hidden" role="menu" aria-label="Settings">
+                    <p class="settings-menu__label">Theme</p>
+                    <button type="button" class="settings-menu__item settings-menu__theme" role="menuitemradio" aria-checked="false" data-action="set-theme" data-theme="light">
+                        <span class="material-symbols-rounded" aria-hidden="true">light_mode</span>
+                        <span>Light</span>
+                        <span class="material-symbols-rounded settings-menu__check" aria-hidden="true">check</span>
+                    </button>
+                    <button type="button" class="settings-menu__item settings-menu__theme" role="menuitemradio" aria-checked="false" data-action="set-theme" data-theme="dark">
+                        <span class="material-symbols-rounded" aria-hidden="true">dark_mode</span>
+                        <span>Dark</span>
+                        <span class="material-symbols-rounded settings-menu__check" aria-hidden="true">check</span>
+                    </button>
+                    <button type="button" class="settings-menu__item settings-menu__theme" role="menuitemradio" aria-checked="true" data-action="set-theme" data-theme="system">
+                        <span class="material-symbols-rounded" aria-hidden="true">desktop_windows</span>
+                        <span>System</span>
+                        <span class="material-symbols-rounded settings-menu__check" aria-hidden="true">check</span>
+                    </button>
+                    <div class="settings-menu__separator" role="separator"></div>
                     <button type="button" class="settings-menu__item" role="menuitem" data-action="import-json">
                         <span class="material-symbols-rounded" aria-hidden="true">upload_file</span>
                         Import JSON

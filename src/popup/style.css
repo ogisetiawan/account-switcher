@@ -20,6 +20,37 @@
   --bg-secondary: #ffffff;
   --border-color: #e5e7eb;
   --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --menu-bg: rgba(255, 255, 255, 0.92);
+  --menu-border: rgba(229, 231, 235, 0.9);
+  --hover-bg: #fff7ed;
+  --danger-hover-bg: #fef2f2;
+  --panel-bg: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(255, 255, 255, 0.2);
+  --item-bg: rgba(255, 255, 255, 0.5);
+  --input-border: #d1d5db;
+  --toast-bg: rgba(255, 255, 255, 0.88);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --primary-color: #fb923c;
+  --secondary-color: #3b2115;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --border-color: #334155;
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.32);
+  --menu-bg: rgba(30, 41, 59, 0.96);
+  --menu-border: rgba(71, 85, 105, 0.9);
+  --hover-bg: #334155;
+  --danger-hover-bg: rgba(127, 29, 29, 0.35);
+  --panel-bg: rgba(30, 41, 59, 0.88);
+  --panel-border: rgba(71, 85, 105, 0.7);
+  --item-bg: rgba(51, 65, 85, 0.55);
+  --input-border: #475569;
+  --toast-bg: rgba(30, 41, 59, 0.94);
+  color-scheme: dark;
 }
 
 *,
@@ -38,6 +69,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 button,
@@ -128,8 +160,8 @@ a {
   z-index: 40;
   min-width: 11.5rem;
   padding: 0.375rem;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(229, 231, 235, 0.9);
+  background: var(--menu-bg);
+  border: 1px solid var(--menu-border);
   border-radius: 0.75rem;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.14);
   backdrop-filter: blur(12px);
@@ -161,7 +193,7 @@ a {
 
 .help-menu__item:hover,
 .settings-menu__item:hover {
-  background-color: #fff7ed;
+  background-color: var(--hover-bg);
   color: var(--primary-color);
 }
 
@@ -182,6 +214,34 @@ a {
   background: var(--border-color);
 }
 
+.settings-menu__label {
+  margin: 0;
+  padding: 0.375rem 0.75rem 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.settings-menu__theme span:nth-child(2) {
+  flex: 1;
+}
+
+.settings-menu__check {
+  display: none;
+  color: var(--primary-color) !important;
+}
+
+.settings-menu__theme[aria-checked="true"] {
+  color: var(--primary-color);
+  background: var(--hover-bg);
+}
+
+.settings-menu__theme[aria-checked="true"] .settings-menu__check {
+  display: inline-block;
+}
+
 .settings-menu__item--danger {
   color: #dc2626;
 }
@@ -192,7 +252,7 @@ a {
 
 .settings-menu__item--danger:hover {
   color: #b91c1c;
-  background-color: #fef2f2;
+  background-color: var(--danger-hover-bg);
 }
 
 .settings-menu__item--danger:hover .material-symbols-rounded {
@@ -273,7 +333,7 @@ a {
 }
 
 .icon-btn:hover {
-  background-color: #e5e7eb;
+  background-color: var(--border-color);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -341,16 +401,17 @@ a {
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  color: var(--text-secondary);
   pointer-events: none;
 }
 
 .search__input {
   width: 100%;
   padding: 0.5rem 1rem 0.5rem 2.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--input-border);
   border-radius: 9999px;
   background: var(--bg-secondary);
+  color: var(--text-primary);
   font-size: 1rem;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
@@ -359,6 +420,12 @@ a {
   outline: none;
   border-color: #fdba74;
   box-shadow: 0 0 0 2px rgba(253, 186, 116, 0.45);
+}
+
+.search__input::placeholder,
+.form-field__input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
 }
 
 /* Site grid */
@@ -508,10 +575,10 @@ a {
 
 .sessions-panel {
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--panel-bg);
   backdrop-filter: blur(12px);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--panel-border);
   box-shadow: var(--shadow-medium);
 }
 
@@ -578,7 +645,7 @@ a {
   gap: 0.5rem;
   padding: 0.75rem;
   border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--item-bg);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.15s ease;
@@ -603,7 +670,7 @@ a {
 
 .session-item__icon {
   margin-right: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .session-item__info {
@@ -677,7 +744,7 @@ a {
 }
 
 .overlay__text {
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .loading::after {
@@ -703,15 +770,15 @@ a {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .modal__close {
-  color: #9ca3af;
+  color: var(--text-secondary);
 }
 
 .modal__close:hover {
-  color: #6b7280;
+  color: var(--text-primary);
 }
 
 .modal__close svg {
@@ -767,13 +834,15 @@ a {
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .form-field__input {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
   border-radius: 0.375rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -816,9 +885,9 @@ a {
 }
 
 .btn--secondary {
-  color: #374151;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+  background: var(--item-bg);
+  border: 1px solid var(--panel-border);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
@@ -854,7 +923,7 @@ a {
   font-weight: 500;
   line-height: 1.4;
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--toast-bg);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -914,6 +983,22 @@ a {
 
 #toast.toast--warning .toast__icon {
   color: #f59e0b;
+}
+
+:root[data-theme="dark"] #toast.toast--info {
+  background: rgba(30, 58, 95, 0.95);
+}
+
+:root[data-theme="dark"] #toast.toast--success {
+  background: rgba(20, 83, 45, 0.95);
+}
+
+:root[data-theme="dark"] #toast.toast--error {
+  background: rgba(127, 29, 29, 0.95);
+}
+
+:root[data-theme="dark"] #toast.toast--warning {
+  background: rgba(120, 53, 15, 0.95);
 }
 
 @keyframes spin {

@@ -1,5 +1,6 @@
 import { SessionData } from "@shared/types";
 import { handleError } from "@shared/utils/errorHandling";
+import { ThemeManager, ThemeMode } from "./components/themeManager";
 import { ToastManager } from "./components/toastManager";
 import { PopupService } from "./services/popup.service";
 import { escapeHtml, getElementByIdSafe, querySelector } from "./utils/dom";
@@ -15,6 +16,7 @@ interface DomainEntry {
 class PopupController {
   private static readonly FAVICON_FALLBACK = "../assets/img/account-switcher.png";
 
+  private themeManager = new ThemeManager();
   private popupService = new PopupService();
   private isExtensionEnvironment = false;
   private initialized = false;
@@ -81,6 +83,8 @@ class PopupController {
   async initialize(): Promise<void> {
     try {
       this.hideAllModals();
+      await this.themeManager.initialize();
+      this.updateThemeMenu();
       await this.withLoading("Loading sessions...", async () => {
         await this.popupService.initialize();
       });
@@ -231,6 +235,9 @@ class PopupController {
         case "toggle-settings":
           this.toggleSettingsMenu();
           return;
+        case "set-theme":
+          this.handleThemeChange(actionEl.dataset.theme);
+          return;
         case "import-json":
           this.openImportPicker();
           return;
@@ -283,6 +290,33 @@ class PopupController {
     this.settingsMenu.classList.remove("hidden");
     this.settingsMenuBtn.setAttribute("aria-expanded", "true");
     this.settingsMenuBtn.closest(".settings-menu")?.classList.add("is-open");
+  }
+
+  private async handleThemeChange(value: string | undefined): Promise<void> {
+    if (!this.isThemeMode(value)) {
+      return;
+    }
+
+    try {
+      await this.themeManager.setMode(value);
+      this.updateThemeMenu();
+      this.closeSettingsMenu();
+      this.showToast(`Theme set to ${value}`);
+    } catch (error) {
+      console.error("Set theme error:", error);
+      this.showToast("Unable to save theme preference");
+    }
+  }
+
+  private updateThemeMenu(): void {
+    const currentMode = this.themeManager.getMode();
+    this.settingsMenu.querySelectorAll<HTMLElement>("[data-theme]").forEach((item) => {
+      item.setAttribute("aria-checked", String(item.dataset.theme === currentMode));
+    });
+  }
+
+  private isThemeMode(value: string | undefined): value is ThemeMode {
+    return value === "light" || value === "dark" || value === "system";
   }
 
   private closeSettingsMenu(): void {
