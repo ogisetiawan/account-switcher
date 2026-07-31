@@ -1,7 +1,7 @@
-import { handleError } from "@shared/utils/errorHandling";
 import { SessionData } from "@shared/types";
-import { PopupService } from "./services/popup.service";
+import { handleError } from "@shared/utils/errorHandling";
 import { ToastManager } from "./components/toastManager";
+import { PopupService } from "./services/popup.service";
 import { escapeHtml, getElementByIdSafe, querySelector } from "./utils/dom";
 
 type Page = "main" | "detail";
@@ -22,6 +22,7 @@ class PopupController {
   private renameSessionId = "";
   private deleteSessionId = "";
   private deleteTargetDomain = "";
+  private deleteAllWebsites = false;
   private searchQuery = "";
 
   private mainPage = getElementByIdSafe("main-page");
@@ -48,10 +49,19 @@ class PopupController {
   private renameError = getElementByIdSafe("renameNameError");
 
   private deleteModal = getElementByIdSafe("deleteModal");
+  private deleteConfirmationField = getElementByIdSafe("deleteConfirmationField");
+  private deleteConfirmationInput = getElementByIdSafe<HTMLInputElement>("deleteConfirmationInput");
+  private confirmDeleteBtn = getElementByIdSafe<HTMLButtonElement>("confirmDeleteModal");
 
   private toastManager: ToastManager;
   private helpMenuBtn = getElementByIdSafe("help-menu-btn");
   private helpMenu = getElementByIdSafe("help-menu");
+  private settingsMenuBtn = getElementByIdSafe("settings-menu-btn");
+  private settingsMenu = getElementByIdSafe("settings-menu");
+  private importJsonInput = getElementByIdSafe<HTMLInputElement>("import-json-input");
+
+  private static readonly MAX_IMPORT_FILE_SIZE = 25 * 1024 * 1024;
+  private static readonly DELETE_ALL_CONFIRMATION = "DELETE ALL";
 
   private static readonly HELP_URLS: Record<string, string> = {
     "getting-started": "https://ogisetiawan.github.io/account-switcher/#how-it-works",
@@ -143,12 +153,22 @@ class PopupController {
 
     getElementByIdSafe("closeDeleteModal").addEventListener("click", () => this.hide(this.deleteModal));
     getElementByIdSafe("cancelDeleteModal").addEventListener("click", () => this.hide(this.deleteModal));
-    getElementByIdSafe("confirmDeleteModal").addEventListener("click", () => this.handleConfirmDelete());
+    this.confirmDeleteBtn.addEventListener("click", () => this.handleConfirmDelete());
+    this.deleteConfirmationInput.addEventListener("input", () => this.updateDeleteConfirmation());
+    this.deleteConfirmationInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !this.confirmDeleteBtn.disabled) {
+        event.preventDefault();
+        this.handleConfirmDelete();
+      }
+    });
+    this.importJsonInput.addEventListener("change", () => this.handleImportFile());
 
-    // When modal closes, reset domain target
+    // When modal closes, reset deletion targets.
     this.deleteModal.addEventListener("transitionend", () => {
       if (this.deleteModal.classList.contains("hidden")) {
         this.deleteTargetDomain = "";
+        this.deleteAllWebsites = false;
+        this.configureDeleteConfirmation(false);
       }
     });
 
@@ -162,6 +182,7 @@ class PopupController {
       if (e.key === "Escape") {
         this.hideAllModals();
         this.closeHelpMenu();
+        this.closeSettingsMenu();
       }
     });
 
@@ -169,6 +190,9 @@ class PopupController {
       const target = event.target as HTMLElement;
       if (!target.closest(".help-menu")) {
         this.closeHelpMenu();
+      }
+      if (!target.closest(".settings-menu")) {
+        this.closeSettingsMenu();
       }
     });
   }
@@ -204,12 +228,21 @@ class PopupController {
         case "toggle-help":
           this.toggleHelpMenu();
           return;
+        case "toggle-settings":
+          this.toggleSettingsMenu();
+          return;
+        case "import-json":
+          this.openImportPicker();
+          return;
+        case "export-json":
+          this.exportJson();
+          return;
+        case "delete-all-websites":
+          this.openDeleteAllWebsitesModal();
+          return;
         case "open-help":
           event.preventDefault();
           this.openHelpLink(actionEl.dataset.help ?? "", (actionEl as HTMLAnchorElement).href);
-          return;
-        case "show-settings":
-          this.showToast("This feature is coming soon");
           return;
       }
     }
@@ -227,6 +260,7 @@ class PopupController {
       return;
     }
 
+    this.closeSettingsMenu();
     this.helpMenu.classList.remove("hidden");
     this.helpMenuBtn.setAttribute("aria-expanded", "true");
     this.helpMenuBtn.closest(".help-menu")?.classList.add("is-open");
@@ -236,6 +270,126 @@ class PopupController {
     this.helpMenu.classList.add("hidden");
     this.helpMenuBtn.setAttribute("aria-expanded", "false");
     this.helpMenuBtn.closest(".help-menu")?.classList.remove("is-open");
+  }
+
+  private toggleSettingsMenu(): void {
+    const isOpen = !this.settingsMenu.classList.contains("hidden");
+    if (isOpen) {
+      this.closeSettingsMenu();
+      return;
+    }
+
+    this.closeHelpMenu();
+    this.settingsMenu.classList.remove("hidden");
+    this.settingsMenuBtn.setAttribute("aria-expanded", "true");
+    this.settingsMenuBtn.closest(".settings-menu")?.classList.add("is-open");
+  }
+
+  private closeSettingsMenu(): void {
+    this.settingsMenu.classList.add("hidden");
+    this.settingsMenuBtn.setAttribute("aria-expanded", "false");
+    this.settingsMenuBtn.closest(".settings-menu")?.classList.remove("is-open");
+  }
+
+  private openImportPicker(): void {
+    this.closeSettingsMenu();
+    this.importJsonInput.value = "";
+    this.importJsonInput.click();
+  }
+
+  private async handleImportFile(): Promise<void> {
+    const file = this.importJsonInput.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    if (file.size > PopupController.MAX_IMPORT_FILE_SIZE) {
+      this.showToast("Import failed: JSON file is larger than 25 MB");
+      return;
+    }
+
+    try {
+      const result = await this.withLoading("Importing sessions...", async () => {
+        const text = await file.text();
+        const parsed: unknown = JSON.parse(text);
+        return this.popupService.importBackup(parsed);
+      });
+
+      this.refreshAfterChange();
+      if (result.importedSessions === 0) {
+        this.showToast(`Nothing imported. ${result.skippedSessions} duplicate session(s) skipped.`);
+        return;
+      }
+
+      this.showToast(
+        `Imported ${result.importedSessions} session(s) from ${result.importedWebsites} website(s).`
+      );
+    } catch (error) {
+      console.error("Import backup error:", error);
+      this.showToast(handleError(error, "import backup"));
+    } finally {
+      this.importJsonInput.value = "";
+    }
+  }
+
+  private exportJson(): void {
+    this.closeSettingsMenu();
+
+    try {
+      const backup = this.popupService.createBackup();
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const date = new Date().toISOString().slice(0, 10);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `account-switcher-backup-${date}.json`;
+      anchor.style.display = "none";
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      this.showToast(`Exported ${backup.websites.length} website(s). Keep this backup secure.`);
+    } catch (error) {
+      console.error("Export backup error:", error);
+      this.showToast(handleError(error, "export backup"));
+    }
+  }
+
+  private openDeleteAllWebsitesModal(): void {
+    this.closeSettingsMenu();
+
+    const state = this.popupService.getState();
+    if (state.sessions.length === 0) {
+      this.showToast("No saved websites or sessions to delete");
+      return;
+    }
+
+    const websiteCount = new Set(state.sessions.map((session) => session.domain)).size;
+    const modalTitle = getElementByIdSafe("deleteModalTitle");
+    const modalMessage = getElementByIdSafe("deleteModalMessage");
+    const confirmBtn = getElementByIdSafe("confirmDeleteModal");
+
+    this.deleteTargetDomain = "";
+    this.deleteSessionId = "";
+    this.deleteAllWebsites = true;
+    modalTitle.textContent = "Delete All Websites & Sessions";
+    modalMessage.innerHTML =
+      `Are you sure you want to permanently delete all <span class="text-emphasis">${websiteCount} website(s)</span> and <span class="text-emphasis">${state.sessions.length} session(s)</span>? This action cannot be undone.`;
+    confirmBtn.querySelector("span:last-child")!.textContent = "Delete Everything";
+    this.configureDeleteConfirmation(true);
+    this.show(this.deleteModal);
+    this.deleteConfirmationInput.focus();
+  }
+
+  private configureDeleteConfirmation(required: boolean): void {
+    this.deleteConfirmationInput.value = "";
+    this.deleteConfirmationField.classList.toggle("hidden", !required);
+    this.confirmDeleteBtn.disabled = required;
+  }
+
+  private updateDeleteConfirmation(): void {
+    this.confirmDeleteBtn.disabled =
+      this.deleteConfirmationInput.value !== PopupController.DELETE_ALL_CONFIRMATION;
   }
 
   private async openHelpLink(helpKey: string, fallbackHref: string): Promise<void> {
@@ -512,6 +666,7 @@ class PopupController {
 
     this.deleteSessionId = sessionId;
     this.deleteTargetDomain = "";
+    this.deleteAllWebsites = false;
     const modalTitle = getElementByIdSafe("deleteModalTitle");
     const modalMessage = getElementByIdSafe("deleteModalMessage");
     const confirmBtn = getElementByIdSafe("confirmDeleteModal");
@@ -520,6 +675,7 @@ class PopupController {
     modalMessage.innerHTML =
       `Are you sure you want to delete session <span class="text-emphasis">${escapeHtml(session.name)}</span>? This action cannot be undone.`;
     confirmBtn.querySelector("span:last-child")!.textContent = "Delete";
+    this.configureDeleteConfirmation(false);
     this.show(this.deleteModal);
   }
 
@@ -528,6 +684,7 @@ class PopupController {
     if (!domain) return;
 
     this.deleteTargetDomain = domain;
+    this.deleteAllWebsites = false;
     const modalTitle = getElementByIdSafe("deleteModalTitle");
     const modalMessage = getElementByIdSafe("deleteModalMessage");
     const confirmBtn = getElementByIdSafe("confirmDeleteModal");
@@ -536,11 +693,35 @@ class PopupController {
     modalMessage.innerHTML =
       `Are you sure you want to delete <span class="text-emphasis">${escapeHtml(domain)}</span> and all <span class="text-emphasis">${this.popupService.getState().sessions.filter((s) => s.domain === domain).length} session(s)</span>? This action cannot be undone.`;
     confirmBtn.querySelector("span:last-child")!.textContent = "Delete Website";
+    this.configureDeleteConfirmation(false);
     this.show(this.deleteModal);
   }
 
   private async handleConfirmDelete(): Promise<void> {
     if (!this.requireExtension()) return;
+
+    if (this.deleteAllWebsites) {
+      if (this.deleteConfirmationInput.value !== PopupController.DELETE_ALL_CONFIRMATION) {
+        this.updateDeleteConfirmation();
+        return;
+      }
+
+      this.deleteAllWebsites = false;
+      try {
+        await this.withLoading("Deleting all sessions...", async () => {
+          await this.popupService.deleteAllSessions();
+        });
+        this.hide(this.deleteModal);
+        this.selectedDomain = "";
+        this.showPage("main");
+        this.refreshAfterChange();
+        this.showToast("All websites and sessions deleted");
+      } catch (error) {
+        console.error("Delete all sessions error:", error);
+        this.showToast(handleError(error, "delete all sessions"));
+      }
+      return;
+    }
 
     // If a domain is targeted, delete by domain
     if (this.deleteTargetDomain) {
@@ -551,6 +732,10 @@ class PopupController {
           await this.popupService.deleteSessionsByDomain(domain);
         });
         this.hide(this.deleteModal);
+        if (this.selectedDomain === domain) {
+          this.selectedDomain = "";
+          this.showPage("main");
+        }
         this.refreshAfterChange();
         this.showToast(`All sessions for ${domain} deleted`);
       } catch (error) {
