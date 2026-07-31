@@ -84,12 +84,67 @@
 
     <footer class="footer" role="contentinfo">
         <div class="footer__actions">
-            <button type="button" class="icon-btn" title="Help" aria-label="Help center" data-action="show-help">
-                <span class="material-symbols-rounded" aria-hidden="true">help_center</span>
-            </button>
-            <button type="button" class="icon-btn" title="Settings" aria-label="Settings" data-action="show-settings">
-                <span class="material-symbols-rounded" aria-hidden="true">settings</span>
-            </button>
+            <div class="help-menu">
+                <button type="button" id="help-menu-btn" class="icon-btn" title="Help" aria-label="Help menu" aria-haspopup="menu" aria-expanded="false" data-action="toggle-help">
+                    <span class="material-symbols-rounded" aria-hidden="true">help_center</span>
+                </button>
+                <div id="help-menu" class="help-menu__dropdown hidden" role="menu" aria-label="Help">
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/#how-it-works" data-action="open-help" data-help="getting-started">
+                        <span class="material-symbols-rounded" aria-hidden="true">rocket_launch</span>
+                        Getting Started
+                    </a>
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/#faq" data-action="open-help" data-help="faq">
+                        <span class="material-symbols-rounded" aria-hidden="true">quiz</span>
+                        FAQ
+                    </a>
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/#changelog" data-action="open-help" data-help="changelog">
+                        <span class="material-symbols-rounded" aria-hidden="true">history</span>
+                        Changelog
+                    </a>
+                    <a class="help-menu__item" role="menuitem" href="https://ogisetiawan.github.io/account-switcher/privacy-policy.html" data-action="open-help" data-help="privacy">
+                        <span class="material-symbols-rounded" aria-hidden="true">policy</span>
+                        Privacy Policy
+                    </a>
+                </div>
+            </div>
+            <div class="settings-menu">
+                <button type="button" id="settings-menu-btn" class="icon-btn" title="Settings" aria-label="Settings menu" aria-haspopup="menu" aria-expanded="false" data-action="toggle-settings">
+                    <span class="material-symbols-rounded" aria-hidden="true">settings</span>
+                </button>
+                <div id="settings-menu" class="settings-menu__dropdown hidden" role="menu" aria-label="Settings">
+                    <p class="settings-menu__label">Theme</p>
+                    <button type="button" class="settings-menu__item settings-menu__theme" role="menuitemradio" aria-checked="false" data-action="set-theme" data-theme="light">
+                        <span class="material-symbols-rounded" aria-hidden="true">light_mode</span>
+                        <span>Light</span>
+                        <span class="material-symbols-rounded settings-menu__check" aria-hidden="true">check</span>
+                    </button>
+                    <button type="button" class="settings-menu__item settings-menu__theme" role="menuitemradio" aria-checked="false" data-action="set-theme" data-theme="dark">
+                        <span class="material-symbols-rounded" aria-hidden="true">dark_mode</span>
+                        <span>Dark</span>
+                        <span class="material-symbols-rounded settings-menu__check" aria-hidden="true">check</span>
+                    </button>
+                    <button type="button" class="settings-menu__item settings-menu__theme" role="menuitemradio" aria-checked="true" data-action="set-theme" data-theme="system">
+                        <span class="material-symbols-rounded" aria-hidden="true">desktop_windows</span>
+                        <span>System</span>
+                        <span class="material-symbols-rounded settings-menu__check" aria-hidden="true">check</span>
+                    </button>
+                    <div class="settings-menu__separator" role="separator"></div>
+                    <button type="button" class="settings-menu__item" role="menuitem" data-action="import-json">
+                        <span class="material-symbols-rounded" aria-hidden="true">upload_file</span>
+                        Import JSON
+                    </button>
+                    <button type="button" class="settings-menu__item" role="menuitem" data-action="export-json">
+                        <span class="material-symbols-rounded" aria-hidden="true">download</span>
+                        Export JSON
+                    </button>
+                    <div class="settings-menu__separator" role="separator"></div>
+                    <button type="button" class="settings-menu__item settings-menu__item--danger" role="menuitem" data-action="delete-all-websites">
+                        <span class="material-symbols-rounded" aria-hidden="true">delete_forever</span>
+                        Delete All Websites &amp; Sessions
+                    </button>
+                </div>
+                <input id="import-json-input" class="sr-only" type="file" accept="application/json,.json" tabindex="-1" aria-hidden="true">
+            </div>
         </div>
 
         <p class="footer__credit">
@@ -179,6 +234,13 @@
                 <p id="deleteModalMessage" class="modal__text">
                     Are you sure you want to delete this item? This action cannot be undone.
                 </p>
+                <div id="deleteConfirmationField" class="delete-confirmation hidden">
+                    <label for="deleteConfirmationInput" class="form-field__label">
+                        To confirm, type <strong>DELETE ALL</strong>
+                    </label>
+                    <input type="text" id="deleteConfirmationInput" class="form-field__input" placeholder="DELETE ALL" autocomplete="off" spellcheck="false">
+                    <p class="delete-confirmation__hint">This confirmation is case-sensitive.</p>
+                </div>
             </div>
             <div class="modal__footer">
                 <button id="cancelDeleteModal" type="button" title="Cancel" class="btn btn--secondary">Cancel</button>

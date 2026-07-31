@@ -1,5 +1,5 @@
 {
-  "current_version": "2.1.2",
+  "current_version": "2.2.0",
   "active_features": [
     {
       "name": "Save session",
@@ -19,7 +19,19 @@
     },
     {
       "name": "Domain management",
-      "detail": "Grid view + delete all sessions per website"
+      "detail": "Delete one website or clear every website and session"
+    },
+    {
+      "name": "Import JSON",
+      "detail": "Merge website and session backups with strict validation"
+    },
+    {
+      "name": "Export JSON",
+      "detail": "Download all websites and sessions as a portable backup"
+    },
+    {
+      "name": "Light, dark & system themes",
+      "detail": "Choose a theme or follow the operating system automatically"
     },
     {
       "name": "Auto-sync",
@@ -44,13 +56,25 @@
   ],
   "releases": [
     {
-      "version": "2.1.2",
+      "version": "2.2.0",
       "date": "July 2026",
       "label": "Latest",
-      "title": "UI polish & session auto-sync",
+      "title": "Session sync, support tools & personalization",
+      "notes": [
+        "Synchronize active session data after re-login or authentication refresh",
+        "Help menu with Getting Started, FAQ, Changelog, and Privacy Policy navigation",
+        "Settings menu with validated JSON import/export for websites and sessions",
+        "Delete all websites and sessions with typed DELETE ALL confirmation",
+        "Light, dark, and system theme modes with saved preferences"
+      ]
+    },
+    {
+      "version": "2.1.2",
+      "date": "July 2026",
+      "label": null,
+      "title": "UI polish & extension refinements",
       "notes": [
         "Redesigned popup with semantic CSS and improved layout",
-        "Active session auto-sync after re-login or token refresh",
         "Updated extension icons and Manifest V3 permissions",
         "Favicon fallback chain for website grid"
       ]
